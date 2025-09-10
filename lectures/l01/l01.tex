@@ -115,7 +115,7 @@
 \end{frame}
 
 
-% Slide 1
+
 \begin{frame}{Compiled vs Interpreted Languages}
 	\begin{columns}[T]
 		\column{0.48\textwidth}
@@ -137,7 +137,7 @@
 	\end{columns}
 \end{frame}
 
-% Slide 2
+
 \begin{frame}{Performance}
 	\begin{columns}[T]
 		\column{0.48\textwidth}
@@ -157,7 +157,7 @@
 	\end{columns}
 \end{frame}
 
-% Slide 3
+
 \begin{frame}{Development Speed}
 	\begin{columns}[T]
 		\column{0.48\textwidth}
@@ -176,7 +176,23 @@
 	\end{columns}
 \end{frame}
 
-% Slide 4
+\begin{frame}{Portability}
+	\begin{columns}[T]
+		\column{0.48\textwidth}
+		\textbf{Compiled}
+		\begin{itemize}
+			\item The code needs to be compiled for each OS and CPU architecture separately
+		\end{itemize}
+		
+		\column{0.48\textwidth}
+		\textbf{Interpreted}
+		\begin{itemize}
+			\item The code can be run with any setup (if the interpreter exists)
+		\end{itemize}
+	\end{columns}
+\end{frame}
+
+
 \begin{frame}{Error Handling}
 	\begin{columns}[T]
 		\column{0.48\textwidth}
@@ -195,7 +211,7 @@
 	\end{columns}
 \end{frame}
 
-% Slide 5
+
 \begin{frame}{Typical Use Cases}
 	\begin{columns}[T]
 		\column{0.48\textwidth}
@@ -219,17 +235,23 @@
 
 % First steps
 \begin{frame}[fragile]{Fortran: First Steps}
-	\begin{itemize}
+		\begin{columns}[T]
+		\column{0.48\textwidth}
+		\begin{itemize}
 		\item Program code inside a \texttt{program ... end program} block
 		\item Always use \texttt{implicit none}
 		\item Simple printing: \texttt{print *, ...}
-	\end{itemize}
-	\begin{lstlisting}[language=Fortran]
-	program hello
-	implicit none
-	print *, "Hello world!"
-	end program hello
-	\end{lstlisting}
+		\end{itemize}
+		\column{0.48\textwidth}
+		\begin{lstlisting}[language=Fortran]
+		program hello
+		implicit none
+		print *, "Hello world!"
+		end program hello
+		\end{lstlisting}
+	\end{columns}
+
+
 \end{frame}
 
 % Compilation
@@ -564,6 +586,8 @@
 		\item \textbf{Avoid Committing Sensitive Information:} Don't commit passwords or API keys.
 	\end{itemize}
 \end{frame}
+
+\section{Exercises}
 
 \begin{frame}{Preliminaries}
 	\begin{columns}[T]
