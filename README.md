@@ -1,7 +1,7 @@
 # Programming Techniques course 25-26
 - Course duration:  10 September – November
 - Place: CCA (Centro de Cálculo del Alumnado) and Aula 17
-- Times: Mondays and Wednesdays, 15:00-17:00
+- Times: Mondays and Wednesdays, 13:00-15:00
 - Teacher: Hannu Parviainen (hannu@iac.es)
 - Teaching language: English
 
