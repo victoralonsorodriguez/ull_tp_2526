@@ -1,7 +1,7 @@
 # Programming Techniques course 25-26
 - Course duration:  10 September – November
 - Place: CCA (Centro de Cálculo del Alumnado) and Aula 17
-- Times: Mondays and Wednesdays, 15:00-17:00
+- Times: Mondays and Wednesdays, 13:00-15:00
 - Teacher: Hannu Parviainen (hannu@iac.es)
 - Teaching language: English
 
@@ -20,23 +20,38 @@ Two options:
 
 
 ## Additional literature
-- S. Chacon and B. Straub "Pro Git".
+- [S. Chacon and B. Straub "Pro Git"](https://git-scm.com/book/en/v2).
 - M. Metcalf, J. Reid, M. Cohen "Modern Fortran Explained" (2nd ed., NY: Oxford University Press, 2018). If the last edition of this book is not available, it can be substituted by previous editions from the same authors: "Modern Fortran Explained" (1st ed., 2011), "Fortran 95/2003 Explained" (2004), or "Fortran 90/95 Explained" (1996, 1999).
 
 ## Prerequisites
 
-### For Windows users
-You can find the instructions for installing GFortran in Windows from the fortran-lang.org website.
+### Installing Fortran
+#### Linux users
+Use either your package manager or conda (as shown below). Detailed instructions can be found on the [fortran-lang.org](https://fortran-lang.org/learn/os_setup/install_gfortran/) website.
 
-### For Mac users
-The easiest way to install GNU Fortran in Mac is by creating a separate Anaconda environment
+#### Windows users
+You can find the instructions for installing GFortran in Windows from the [fortran-lang.org](https://fortran-lang.org/learn/os_setup/install_gfortran/) website.
+
+#### Mac users
+The easiest way to install GNU Fortran on Mac is by creating a separate Anaconda environment
 
     conda create -n fortran -c conda-forge compilers
 
-After which the conda environment can be activated as
+After which, the conda environment can be activated as
 
     conda activate fortran 
 
+### Forking and cloning the course repository
+1. On GitHub: click "Fork" on the course repository page
+2. On your computer: clone your fork
+``` 
+$ git clone git@github.com:your-username/course-repo.git
+$ cd course-repo
+```
+4. Verify your remote
+```
+$ git remote -v
+```
 ---
 <p align="center">
 &copy;2025 Hannu Parviainen
