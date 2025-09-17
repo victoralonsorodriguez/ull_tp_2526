@@ -28,9 +28,7 @@ Now, after the second lecture, your directory tree should look like:
 
 | Name | Directory |
 |--|--|
-| First_name Surname Surname | sf |
-| First_name Surname Surname | sf |
-
+| Pablo de Ferra Chermaz | dfp |
 ---
 <p align="center">
 &copy;2025 Hannu Parviainen
