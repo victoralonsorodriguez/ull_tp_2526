@@ -28,8 +28,8 @@ Now, after the second lecture, your directory tree should look like:
 
 | Name | Directory |
 |--|--|
-| First_name Surname Surname | sf |
-| First_name Surname Surname | sf |
+| Cristina Bolaños Quevedo | cbq |
+
 
 ---
 <p align="center">
