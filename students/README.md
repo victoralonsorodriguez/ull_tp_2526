@@ -25,8 +25,7 @@ Now, your directory tree should look like:
 
 | Name | Directory |
 |--|--|
-| First_name Surname Surname | sf |
-| First_name Surname Surname | sf |
+| Lucía Rodríguez Rodríguez | rl |
 
 ---
 <p align="center">
