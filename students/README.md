@@ -27,7 +27,9 @@ Now, after the second lecture, your directory tree should look like:
 ## Students
 
 | Name | Directory |
+|--|--|
 | Pablo de Ferra Chermaz | dfp |
+| Raquel Garcia Paris | gr |
 | Daniel Sosa Rodríguez | srd |
 ---
 <p align="center">
