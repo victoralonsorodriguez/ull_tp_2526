@@ -31,6 +31,7 @@ Now, after the second lecture, your directory tree should look like:
 | Pablo de Ferra Chermaz | dfp |
 | Raquel Garcia Paris | gr |
 | Daniel Sosa Rodríguez | srd |
+| Victor Alonso Rodriguez | va |
 ---
 <p align="center">
 &copy;2025 Hannu Parviainen
