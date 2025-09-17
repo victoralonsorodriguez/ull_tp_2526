@@ -3,7 +3,6 @@
 
 \begin{document}
 
-% Title page
 \begin{frame}
   \titlepage
 \end{frame}
@@ -15,7 +14,7 @@
     \item Lecturer: Hannu Parviainen (ULL, IAC)
     \item Language: English
     \item Contact: \texttt{hparviai@ull.edu.es}
-    \item Schedule: Mondays and Wednesdays 15:00--17:00
+    \item Schedule: Mondays and Wednesdays 13:00--15:00
     \item Dates: 10.9.2025 -- 2X.11.2025
     \item Location: CCA
     \item Structure: theory + exercises
@@ -63,24 +62,15 @@
 
 
 \begin{frame}{Not Course Topics}
-	
-		%\begin{columns}[T]
-		%\column{0.48\textwidth}
-
-		\begin{block}{IDEs}
-		\begin{itemize}
-			\item Course teaches programming, not how to use a specific Integrated Development Environment
-			\item The code can be written using a text editor and compiled using command-line commands
-			\item \ldots however, a good IDE can make the course way less painful
-			\item Good options: \href{https://code.visualstudio.com}{VSCode}, \href{https://www.codeblocks.org/}{Code::Blocks}, Emacs (old-school)
-			\item Check the list from \href{https://fortran-lang.org/learn/os_setup/ides/}{fortran-lang.org}
-		\end{itemize}
-		\end{block}
-		
-		%\column{0.48\textwidth}
-
-	%\end{columns}
-	
+	\begin{block}{IDEs}
+	\begin{itemize}
+		\item Course teaches programming, not how to use a specific Integrated Development Environment
+		\item The code can be written using a text editor and compiled using command-line commands
+		\item \ldots however, a good IDE can make the course way less painful
+		\item Good options: \href{https://code.visualstudio.com}{VSCode}, \href{https://www.codeblocks.org/}{Code::Blocks}, Emacs (old-school)
+		\item Check the list from \href{https://fortran-lang.org/learn/os_setup/ides/}{fortran-lang.org}
+	\end{itemize}
+	\end{block}
 \end{frame}
 
 
@@ -94,7 +84,15 @@
   \end{itemize}
 \end{frame}
 
-
+\begin{frame}{Basic Workflow}
+	\begin{enumerate}
+		\item Fork the official course repository on GitHub into your own account
+		\item Clone your forked repository to your local computer
+		\item Work on exercises in your own computer
+		\item Push changes back to your fork on GitHub
+		\item Open pull requests to merge your work to the main course repository
+	\end{enumerate}
+\end{frame}
 
 \section{Fortran}
 
@@ -233,7 +231,6 @@
 \end{frame}
 
 
-% First steps
 \begin{frame}[fragile]{Fortran: First Steps}
 		\begin{columns}[T]
 		\column{0.48\textwidth}
@@ -250,11 +247,8 @@
 		end program hello
 		\end{lstlisting}
 	\end{columns}
-
-
 \end{frame}
 
-% Compilation
 \begin{frame}[fragile]{Compiling Fortran}
 	\begin{itemize}
 		\item Source code file $\to$ executable program
@@ -267,7 +261,6 @@
 	\end{lstlisting}
 \end{frame}
 
-% File suffixes
 \begin{frame}{Fortran Source Files}
 	\begin{itemize}
 		\item Use suffix \texttt{.f90} for modern Fortran
@@ -395,7 +388,6 @@
 	\end{itemize}
 \end{frame}
 
-% New slide: How Git Tracking Works
 \begin{frame}
 	\frametitle{How Git Tracking Works}
 	\begin{itemize}
@@ -464,7 +456,6 @@
 	\end{itemize}
 \end{frame}
 
-%\section{Branching and Merging}
 
 \begin{frame}
 	\frametitle{Understanding Branches}
@@ -547,7 +538,6 @@
 	\end{itemize}
 \end{frame}
 
-%\section{Working with GitHub}
 
 \begin{frame}[fragile]
 	\frametitle{Connecting a Local Repository to GitHub}
@@ -608,6 +598,24 @@
 			\end{itemize}
 		\end{block}		
 	\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Preliminaries}
+	\begin{block}{Setup Course}
+	\begin{itemize}
+	 \item On GitHub: click "Fork" on the course repository page
+	 \item On your computer: clone your fork
+		\begin{lstlisting}[language=bash]
+		$ git clone git@github.com:your-username/course-repo.git
+		$ cd course-repo
+		\end{lstlisting}
+	\item Verify your remote
+		\begin{lstlisting}[language=bash]
+		$ git remote -v
+		\end{lstlisting}
+	\end{itemize}
+	\end{block}
 \end{frame}
 
 %\section{Exercises}
