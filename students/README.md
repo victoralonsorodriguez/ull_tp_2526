@@ -24,7 +24,7 @@ Now, your directory tree should look like:
 ## Students
 
 | Name | Directory |
-|--|--|
+| Daniel Sosa Rodriguez | srd |
 | First_name Surname Surname | sf |
 | First_name Surname Surname | sf |
 
