@@ -28,6 +28,7 @@ Now, after the second lecture, your directory tree should look like:
 
 | Name | Directory |
 |--|--|
+| Cristina Bolaños Quevedo | cbq |
 | Pablo de Ferra Chermaz | dfp |
 | Raquel Garcia Paris | gr |
 | Angeles Moreno Guedes | ma |
