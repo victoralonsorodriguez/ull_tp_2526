@@ -28,9 +28,10 @@ Now, after the second lecture, your directory tree should look like:
 
 | Name | Directory |
 |--|--|
-| Lucía Rodríguez Rodríguez | rl |
 | Pablo de Ferra Chermaz | dfp |
 | Raquel Garcia Paris | gr |
+| Angeles Moreno Guedes | ma |
+| Lucía Rodríguez Rodríguez | rl |
 | Daniel Sosa Rodríguez | srd |
 | Victor Alonso Rodriguez | va |
 
