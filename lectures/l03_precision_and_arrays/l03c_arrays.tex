@@ -116,6 +116,30 @@
 
 %\subsection{Array Syntax and Sections}
 
+
+\begin{frame}[fragile]{Subscript Triplets}
+	\begin{block}{General form}
+		\texttt{[lb]:[ub][:stride]} with scalar integer expressions. Examples:
+	\end{block}
+	\begin{block}{Examples}
+		\begin{lstlisting}[language=Fortran]
+		A(:)        ! whole array
+		A(3:9)      ! A(3) .. A(9) step 1
+		A(3:9:1)    ! same as above
+		A(m:n)      ! lower/upper bounds
+		A(m:n:k)    ! step k
+		A(8:3:-1)   ! descending section
+		A(8:3)      ! zero-sized (default step 1)
+		A(m:)       ! m .. upper bound
+		A(:n)       ! lower bound .. n
+		A(::2)      ! every 2nd element
+		A(m:m)      ! 1-element section
+		A(m)        ! scalar element (not a section)
+		\end{lstlisting}
+	\end{block}
+\end{frame}
+
+
 \begin{frame}[fragile]{Whole Arrays, Elements, and Sections}
   \begin{block}{Whole arrays}
 \begin{lstlisting}[language=Fortran]
@@ -149,43 +173,21 @@ B = sin(C) + cos(D) ! elemental intrinsics
   \end{block}
 \end{frame}
 
-\begin{frame}{Section Visualisation and Validity}
-  \begin{block}{Given}
-    \texttt{real, dimension(1:6,1:8) :: P}
-  \end{block}
-  \begin{block}{Valid}
-    \texttt{P(1:3,1:4) = P(1:6:2,1:8:2)}\\
-    \texttt{P(1:3,1:4) = 1.0}
-  \end{block}
-  \begin{block}{Invalid}
-    \texttt{P(2:8:2,1:7:3) = P(1:3,1:4)} (shapes differ)\\
-    \texttt{P(2:6:2,1:7:3) = P(2:5,7)} (1D section vs 2D section)
-  \end{block}
-\end{frame}
+%\begin{frame}{Section Visualisation and Validity}
+%  \begin{block}{Given}
+%    \texttt{real, dimension(1:6,1:8) :: P}
+%  \end{block}
+%  \begin{block}{Valid}
+%    \texttt{P(1:3,1:4) = P(1:6:2,1:8:2)}\\
+%    \texttt{P(1:3,1:4) = 1.0}
+%  \end{block}
+%  \begin{block}{Invalid}
+%    \texttt{P(2:8:2,1:7:3) = P(1:3,1:4)} (shapes differ)\\
+%    \texttt{P(2:6:2,1:7:3) = P(2:5,7)} (1D section vs 2D section)
+%  \end{block}
+%\end{frame}
 
-\begin{frame}[fragile]{Subscript Triplets}
-  \begin{block}{General form}
-    \texttt{[lb]:[ub][:stride]} with scalar integer expressions. Examples:
-  \end{block}
-  \begin{block}{Examples}
-\begin{lstlisting}[language=Fortran]
-A(:)        ! whole array
-A(3:9)      ! A(3) .. A(9) step 1
-A(3:9:1)    ! same as above
-A(m:n)      ! lower/upper bounds
-A(m:n:k)    ! step k
-A(8:3:-1)   ! descending section
-A(8:3)      ! zero-sized (default step 1)
-A(m:)       ! m .. upper bound
-A(:n)       ! lower bound .. n
-A(::2)      ! every 2nd element
-A(m:m)      ! 1-element section
-A(m)        ! scalar element (not a section)
-\end{lstlisting}
-  \end{block}
-\end{frame}
-
-\begin{frame}[fragile]{Array Indexing (1/4): Single Element}
+\begin{frame}[fragile]{Array Indexing: Single Element}
   \begin{columns}[T]
     \column{0.45\textwidth}
     \begin{block}{Indexing Example}
@@ -220,7 +222,7 @@ A(m)        ! scalar element (not a section)
   \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Array Indexing (2/4): Row Section}
+\begin{frame}[fragile]{Array Indexing: Row Section}
   \begin{columns}[T]
     \column{0.45\textwidth}
     \begin{block}{Indexing Example}
@@ -252,7 +254,7 @@ A(m)        ! scalar element (not a section)
   \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Array Indexing (3/4): Column Section}
+\begin{frame}[fragile]{Array Indexing: Column Section}
   \begin{columns}[T]
     \column{0.45\textwidth}
     \begin{block}{Indexing Example}
