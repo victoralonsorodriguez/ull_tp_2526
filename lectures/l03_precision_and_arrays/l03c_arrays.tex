@@ -371,7 +371,7 @@ B = sin(C) + cos(D) ! elemental intrinsics
 \begin{frame}[fragile]{Array I/O Example}
 \begin{block}{Program}
 \begin{lstlisting}[language=Fortran]
-program Owt
+program ex3
   implicit none
   integer, parameter :: n=3
   integer :: a(n,n)
@@ -381,7 +381,7 @@ program Owt
   print*, 'Subarray =', a(:2,:2)
   print*, 'Whole   =', a
   print*, 'Transposed =', transpose(a)
-end program Owt
+end program ex3
 \end{lstlisting}
 \end{block}
 \end{frame}
