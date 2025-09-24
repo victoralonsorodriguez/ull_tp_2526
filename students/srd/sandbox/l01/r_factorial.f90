@@ -1,13 +1,11 @@
 program hello
     implicit none
     ! Declaración de variables
-    INTEGER :: R, i, factorial
+    REAL :: R
     ! Input del usuario
-    print *, "Insert value of R (integer)"
+    print *, "Insert value of R"
     READ *, R
-    factorial = 1
-    DO i= 1,R,1
-        factorial = i * factorial
-    END DO
-    print *, "The factorial is",factorial
+    print *, "The factorial is"
+    print *, gamma(r+1.0)    
+
 end program hello
