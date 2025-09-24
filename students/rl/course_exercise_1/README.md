@@ -1,1 +1,0 @@
-Lucía Rodríguez Rodríguez -- rl/course_exercise_1
