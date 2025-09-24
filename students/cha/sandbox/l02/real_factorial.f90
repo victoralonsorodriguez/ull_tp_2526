@@ -6,7 +6,7 @@ program real_factorial
    ! The factorial for real numbers is defined using the Gamma function:
    !   r! = Gamma(r + 1)
    ! The Gamma function is defined by the integral:
-   !   Gamma(x) = ∫_0^∞ t^(x-1) * exp(-t) dt
+   !   Gamma(x) = ∫_0^\infty t^(x-1) * exp(-t) dt
    ! For integer n, Gamma(n+1) = n! (so it generalizes the factorial).
    !
    ! In modern Fortran (gfortran, for example), gamma() is an intrinsic function.
@@ -20,7 +20,7 @@ program real_factorial
      print *, "Error: r must be positive."
   else
      result = gamma(r + 1.0d0)
-     
+
      print *, r, "! =", result
   end if
 

@@ -1,10 +1,10 @@
-program matrix_mult_simple
+program matrix_mult_simple_matmul
     implicit none
 
     ! Matrix dimensions
     integer :: na, ma, nb, mb
     real :: A(3,4), B(3,3), C(3,4)
-    integer :: i, j, k
+    integer :: i
 
     ! Define matrix sizes
     na = 3
@@ -29,17 +29,8 @@ program matrix_mult_simple
         stop
     end if
 
-    ! Initialize result matrix
-    C = 0.0
-
-    ! Perform B*A multiplication
-    do i = 1, nb
-        do j = 1, ma
-            do k = 1, mb
-                C(i,j) = C(i,j) + B(i,k) * A(k,j)
-            end do
-        end do
-    end do
+    ! Perform B*A using matmul
+    C = matmul(B, A)
 
     ! Print result
     print *, "Matrix B*A ="
@@ -47,10 +38,4 @@ program matrix_mult_simple
         print '(4F6.1)', C(i,1:ma)
     end do
 
-end program matrix_mult_simple
-
-
-
-
-
-
+end program matrix_mult_simple_matmul

@@ -9,7 +9,8 @@ program palindrome_check
     original = n
     reversed = 0
 
-    ! A weird loop to reverse the digits (i don't know if there is a better option to do it)
+    ! A weird loop to reverse the digits 
+    ! (i don't know if there is a better option to do it)
     do while (n > 0)
         digit = mod(n, 10)          ! last digit
         reversed = reversed * 10 + digit
