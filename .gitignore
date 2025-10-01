@@ -1,9 +1,43 @@
-# VSCode
-.vscode/
-*.code-workspace
+gitignore
 
-# Fortran build files
-*.o
+# Archivos compilados de Fortran
 *.mod
+*.o
+*.obj
 *.exe
+*.a
+*.so
+*.dll
+*.dylib
+
+# Archivos de backup de editores
+*~
+*.bak
+*.swp
+*.swo
+
+# Directorios de build
+build/
+dist/
+bin/
+lib/
+
+# Archivos específicos de VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Archivos de datos grandes o binarios
+*.dat
+*.bin
 *.out
