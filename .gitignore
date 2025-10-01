@@ -1,0 +1,9 @@
+# VSCode
+.vscode/
+*.code-workspace
+
+# Fortran build files
+*.o
+*.mod
+*.exe
+*.out
