@@ -1,0 +1,88 @@
+\input{../common}
+\subtitle{Course exercise 1: basic dynamical simulation}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section{Exercise 1}
+
+\begin{frame}
+  \frametitle{Exercise 1: basic dynamical simulation}
+
+  \textbf{Exercise:} Direct numerical integration of a system consisting of gravitationally interacting particles using the leapfrog integration method.
+  \begin{itemize}
+   \item See TAP p. 32-48 and p. 74-85
+  \end{itemize}
+
+
+  \textbf{To do}
+  \begin{enumerate}
+   \item Create module \texttt{geometry} stored in \texttt{geometry.f90} file that contains:
+   \begin{itemize}
+    \item types \texttt{vector3d} and \texttt{point3d}, both with (64-bit) real components \texttt{x}, \texttt{y}, and \texttt{z}.
+    \item functions \texttt{sumvp}, \texttt{sumpv}, \texttt{subvp}, \texttt{subpv}, \texttt{mulrv}, \texttt{mulvr}, \texttt{divvr} for adding and subtracting points and vectors, and for multiplying and dividing vectors with reals.
+    \item operators matching these functions.
+    \item function \texttt{distance} that calculates the distance between two 3d points.
+    \item function \texttt{angle} that calculates the angle between two vectors a and b (in radians).
+    \item function \texttt{normalize} that takes a vector a and returns it divided by its length.
+    \item function \texttt{cross\_product} that takes two 3d vectors (a and b) and returns their cross product.
+   \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Exercise 1: basic dynamical simulation}
+
+  \begin{enumerate}
+   \item[2.] Create a module \texttt{particle} stored in \texttt{particle.f90} that uses the \texttt{geometry} module and contains a type \texttt{particle3d}. This type should have components: a \texttt{point3d} variable \texttt{p} storing the particle's position, a \texttt{vector3d} variable \texttt{v} storing the particle's velocity, and a real variable \texttt{m} storing the particle's mass.
+   \item[3.] Take the old \texttt{leapfrog.f90} code and modify it to use the \texttt{geometry} and \texttt{particle} modules. Store the program in \texttt{ex1.f90} file.
+   \item[4.] Modify the program to read the simulation setup from a file given as a command line argument.
+   \item[5.] Modify the program to write the simulation data into a file “output.dat”, where each line contains the simulation state as "time p1x p1y p1z p2x p2y p2z ... pnx pny pnz".
+   \item[6.] Write a Makefile for the project
+  \end{enumerate}
+  \end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Exercise 1: basic dynamical simulation}
+
+  \begin{enumerate}
+   \item[7.] Create a pull request (PR) with your code and add all the course attendees as reviewers.
+   \item[8.] Review the code in the other student's PRs and write at least one comment to each.
+   \item[9.] (Optional): revise your code based on the comment's you've received.
+   \item[10.] Write a \texttt{README.md} for the exercise where you explain the code.
+   \item[11.] In the PR, tag the teacher and say that you're finished with the exercise.
+  \end{enumerate}
+  \end{frame}
+
+
+\begin{frame}
+  \frametitle{Exercise 1: basic dynamical simulation}
+
+  \textbf{Scoring} is based on
+  \begin{itemize}
+   \item Code (80\%)
+  \begin{enumerate}
+  \item Functionality: the code should work as described.
+  \item Understandability: the code should be clear to read and logical.
+  \item Comments: all the functionality in both the module and the program should be documented using comments.
+  \item Use of guidelines: the code should use the type and method names exactly as written in the exercise.
+  \end{enumerate}
+  \item Collaboration (20\%): GitHub PRs, PR comments, and participation.
+   \end{itemize}
+
+  \textbf{Bonus points} from anything that goes beyond to what I've taught at the classes, frequent push requests, interaction (asking questions, answering questions, and so on). If in doubt, ask!
+
+   \vspace*{2mm}
+  \textbf{Notes:} All the source files should be saved in your \texttt{ex1} folder. Add and commit your changes often and feel free to try working with different branches. All the real variables should be 64-bit floats (double precision).
+
+  \end{frame}
+
+
+\end{document}
