@@ -2,8 +2,15 @@
 .vscode/
 *.code-workspace
 
-# Fortran build files
+# Fortran build files  
 *.o
 *.mod
 *.exe
 *.out
+
+# Ignorar todo en students/ excepto archivos Fortran y README
+students/**/*
+!students/**/*.f90
+!students/**/*.f95
+!students/**/*.f
+!students/**/README.md
