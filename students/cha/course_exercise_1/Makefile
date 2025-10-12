@@ -15,16 +15,16 @@ particle.o: particle.f90 geometry.o
 	$(FC) $(FFLAGS) -c particle.f90
 
 # Rule to compile the main program object file
-# Depends on both modules
-ex1.o: ex1.f90 geometry.o particle.o
-	$(FC) $(FFLAGS) -c ex1.f90
+ex1v2.o: ex1v2.f90 geometry.o particle.o
+	$(FC) $(FFLAGS) -c ex1v2.f90
 
 # Rule to link all object files into the final executable
-ex1: ex1.o geometry.o particle.o
-	$(FC) $(FFLAGS) -o ex1 ex1.o geometry.o particle.o
+ex1: ex1v2.o geometry.o particle.o
+	$(FC) $(FFLAGS) -o ex1 ex1v2.o geometry.o particle.o
 
 # Rule to clean up the directory
 clean:
-	rm -f *.o *.mod ex1 output.dat
+	rm -f *.o *.mod ex1
+
 
 
