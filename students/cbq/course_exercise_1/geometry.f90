@@ -13,7 +13,7 @@ module geometry
     end interface
 
     interface operator (-)
-        module procedure subvp, subvp, subvv
+        module procedure subvp, subpv, subvv, subpp
     end interface
 
     interface operator (*)
@@ -60,6 +60,12 @@ module geometry
         subpv = point3d(p%x - v%x, p%y - v%y, p%z - v%z)
     end function subpv
 
+    ! Point - point = vector
+    pure type(vector3d) function subpp(p1, p2)
+        type(point3d), intent(in) :: p1, p2
+        subpp = vector3d(p1%x - p2%x, p1%y - p2%y, p1%z - p2%z)
+    end function subpp
+
     ! Vector - vector = vector
     pure type(vector3d) function subvv(a, b)
         type(vector3d), intent(in) :: a, b
@@ -87,6 +93,7 @@ module geometry
         divvr = vector3d(v%x / r, v%y / r, v%z / r)
     end function divvr
 
+
     ! Distance between two points
     pure real(kind=8) function distance(p1, p2)
         type(point3d), intent(in) :: p1, p2
@@ -105,13 +112,6 @@ module geometry
         dot_product = a%x * b%x + a%y * b%y + a%z * b%z
         mag_a = sqrt(a%x*a%x + a%y*a%y + a%z*a%z)
         mag_b = sqrt(b%x*b%x + b%y*b%y + b%z*b%z)
-        
-        ! Handle zero vectors to avoid division by zero
-        if (mag_a == 0.0_8 .or. mag_b == 0.0_8) then
-            angle = 0.0_8
-            return
-        end if
-        
         cos_angle = dot_product / (mag_a * mag_b)
         angle = acos(cos_angle)
     end function angle
@@ -122,7 +122,6 @@ module geometry
         real(kind=8) :: mag
         
         mag = sqrt(a%x*a%x + a%y*a%y + a%z*a%z)
-        
         if (mag == 0.0_8) then
             normalize = vector3d(0.0_8, 0.0_8, 0.0_8)
         else
@@ -133,8 +132,8 @@ module geometry
 
     ! Cross-product
     pure type(vector3d) function xproduct(a, b)
-    type(vector3d), intent(in) :: a, b
-    xproduct= vector3d(a%y*b%z - a%z*b%y,  a%z* b%x - a%x*b%z, a%x*b%y - a%y*b%x )
+        type(vector3d), intent(in) :: a, b
+        xproduct= vector3d(a%y*b%z - a%z*b%y,  a%z* b%x - a%x*b%z, a%x*b%y - a%y*b%x )
     end function xproduct
 
 end module geometry
