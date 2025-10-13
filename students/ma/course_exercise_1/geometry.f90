@@ -16,11 +16,11 @@ module geometry
    ! We link the functions with operators
 
     interface operator(+)
-        module procedure sumvp, sumpv
+        module procedure sumvp, sumpv, sumvv
     end interface
 
     interface operator(-)
-        module procedure subpv,subvp
+        module procedure subpv,subvp, subvv
     end interface
 
     interface operator(*)
@@ -52,6 +52,17 @@ module geometry
         subvp = point3d(v%x - p%x, v%y - p%y, v%z - p%z) 
     end function subvp
 
+    pure type(vector3d) function sumvv(v1,v2)
+        type(vector3d), intent(in) :: v1
+        type(vector3d), intent(in) :: v2
+        sumvv = vector3d(v1%x + v2%x, v1%y + v2%y, v1%z + v2%z)
+    end function sumvv
+
+    pure type(vector3d) function subvv(v1,v2)
+        type(vector3d), intent(in) :: v1
+        type(vector3d), intent(in) :: v2
+        subvv = vector3d(v1%x - v2%x, v1%y - v2%y, v1%z - v2%z)
+    end function subvv
 
     pure type(point3d) function subpv(p,v)
         type(vector3d), intent(in) :: v
@@ -71,14 +82,14 @@ module geometry
     ! The factor order do not affect the product in this case
 
     pure type(vector3d) function mulvr(v, a)
-        real(dp), intent(in) :: a
         type(vector3d), intent(in) :: v
+        real(dp), intent(in) :: a
         mulvr = mulrv(a,v) 
     end function mulvr
 
     pure type(vector3d) function divvr(v, a)
-        real(dp), intent(in) :: a
         type(vector3d), intent(in) :: v
+        real(dp), intent(in) :: a
         divvr = vector3d(v%x/a, v%y/a, v%z/a) 
     end function divvr
 
