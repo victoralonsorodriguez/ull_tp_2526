@@ -10,10 +10,10 @@ module geometry
 
     ! Definition of operators to simplify the code
     interface operator(+)
-        module procedure sumvp, sumpv
+        module procedure sumvp, sumpv, sumvv
     end interface
     interface operator(-)
-        module procedure subvp, subpv
+        module procedure subvp, subpv, subvv
     end interface
     interface operator(*)
         module procedure mulrv, mulvr
@@ -97,6 +97,25 @@ contains
     res%y = v%y / r
     res%z = v%z / r
   end function divvr
+  
+  ! Vector + Vector (useful for later)
+  pure function sumvv(a, b) result(res)
+    type(vector3d), intent(in) :: a, b
+    type(vector3d) :: res
+    res%x = a%x + b%x
+    res%y = a%y + b%y
+    res%z = a%z + b%z
+  end function sumvv
+
+  ! Vector - Vector (useful for later)
+  pure function subvv(a, b) result(res)
+    type(vector3d), intent(in) :: a, b
+    type(vector3d) :: res
+    res%x = a%x - b%x
+    res%y = a%y - b%y
+    res%z = a%z - b%z
+  end function subvv
+
   
   ! Distance between two points
   pure function distance(p1, p2) result(d) ! distance in same units as given
