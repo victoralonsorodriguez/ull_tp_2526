@@ -1,16 +1,12 @@
-! Create a module particle stored in particle.f90 that uses the geometry module and
-! contains a type particle3d. This type should have components: a point3d variable p
-! storing the particle’s position, a vector3d variable v storing the particle’s velocity, and a
-! real variable m storing the particle’s mass.
-
 module particle
+    use iso_fortran_env, only: real64
     use geometry
     implicit none
 
     type particle3d
+        real(real64) :: m       ! particle's mass
         type(point3d) :: p      ! particle's position
         type(vector3d) :: v     ! particle's velocity
-        real :: m               ! particle's mass
     end type particle3d
 
 end module particle

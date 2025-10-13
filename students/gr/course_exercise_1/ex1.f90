@@ -1,29 +1,29 @@
-! Modify the program to read the simulation setup from a file given as a command line argument.
-! Modify the program to write the simulation data into a file “output.dat”, where each line
-! contains the simulation state as ”time p1x p1y p1z p2x p2y p2z ... pnx pny pnz”.
-! Write a Makefile for the project
-
 program leapfrog
+    use iso_fortran_env, only: real64
     use geometry
     use particle
     implicit none
-    integer :: i, j, k
+    integer :: i, j
     integer :: n
-    real :: dt, t_end, t, dt_out, t_out
-    real :: rs, r2, r3
+    real(real64) :: dt, t_end, t, dt_out, t_out
+    real(real64) :: r3
 
-    real, dimension(:), allocatable :: m
-    real, dimension(:,:), allocatable :: r,v,a
-    real, dimension(3) :: rji
+    ! p: array containing particles (each component is type(particle3d))
+    type(particle3d), dimension(:), allocatable :: p
+    ! a: array containing acelerations (each coomponent is type(vector3d))
+    type(vector3d), dimension(:), allocatable :: a
+
+    type(vector3d) :: rji
+    real(real64) :: dist    ! distance between two points
 
     character(len=300) :: setup_file_name
     print *, 'Insert name of the simulation setup file:'
     read *, setup_file_name
 
-    ! open and read file with the input data
+    ! Open and read file with the input data
     open(unit=10, file=setup_file_name, status='old', action='read')
 
-    ! create and write file for the output of the simulation
+    ! Create and write file for the output of the simulation
     open(unit=20, file='output.dat', status='replace', action='write')
 
     read(10, *) dt
@@ -31,62 +31,53 @@ program leapfrog
     read(10, *) t_end
     read(10, *) n
 
-    allocate(m(n))
-    allocate(r(n,3))
-    allocate(v(n,3))
-    allocate(a(n,3))
+    allocate(p(n))
+    allocate(a(n))
 
     do i = 1, n
-        read(10, *) m(i), r(i,:),v(i,:)
+        read(10, *) p(i)%m, p(i)%p, p(i)%v
     end do
 
-    !print *, dt, dt_out, t_end, n
-    !print *, m
-    ! print *, r
-    ! print *, r(1,:)
-    ! print *, r(1,1)
-    !print *, v
+    a = vector3d(0.0, 0.0, 0.0)  ! Initialize all elements of 'a' to zero
 
-    a = 0.0
     do i = 1,n
         do j = i+1,n
-            rji = r(j,:) - r(i,:)
-            r2 = sum(rji**2)
-            if (r2 /= 0.0) then
-                r3 = r2 * sqrt(r2)
-                a(i,:) = a(i,:) + m(j) * rji / r3  ! Acceleration on particle i due to particle j
-                a(j,:) = a(j,:) - m(i) * rji / r3  ! Acceleration on particle j due to particle i
-            end if
+            rji = p(j)%p - p(i)%p
+            dist = distance(p(i)%p, p(j)%p)
+            r3 = dist * dist**2
+            a(i) = a(i) + p(j)%m * rji / r3  ! Acceleration on particle i due to particle j
+            a(j) = a(j) - p(i)%m * rji / r3  ! Acceleration on particle j due to particle i
         end do
     end do
 
     t_out = 0.0
     t = 0.0
     do while (t <= t_end)
-        v = v + a * dt/2
-        r = r + v * dt
-        a = 0.0
+
+        do i = 1,n
+            p(i)%v = p(i)%v + a(i) * (dt/2)
+            p(i)%p = p(i)%p + p(i)%v * dt
+        end do
+
+        a = vector3d(0.0, 0.0, 0.0)
+        
         do i = 1,n
             do j = i+1,n
-                rji = r(j,:) - r(i,:)
-                r2 = sum(rji**2)
-                if (r2 /= 0.0) then
-                    r3 = r2 * sqrt(r2)
-                    a(i,:) = a(i,:) + m(j) * rji / r3
-                    a(j,:) = a(j,:) - m(i) * rji / r3
-                end if
+                rji = p(j)%p - p(i)%p
+                dist = distance(p(i)%p, p(j)%p)
+                r3 = dist * dist**2
+                a(i) = a(i) + p(j)%m * rji / r3
+                a(j) = a(j) - p(i)%m * rji / r3
             end do
         end do
 
-        v = v + a * dt/2
+        do i = 1,n
+            p(i)%v = p(i)%v + a(i) * (dt/2)
+        end do
 
         t_out = t_out + dt
         if (t_out >= dt_out) then
-            ! do i = 1,n
-            !     !print*, r(i,:)
-            !     write(20, *) t, r(i,:)
-            ! end do
-            write(20, *) t, r(:,:)
+            write(20, *) t, p%p
 
             t_out = 0.0
         end if

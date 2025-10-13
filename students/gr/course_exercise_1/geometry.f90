@@ -1,13 +1,3 @@
-! Create module geometry stored in geometry.f90 file that contains:
-! ▶ types vector3d and point3d, both with (64-bit) real components x, y, and z.
-! ▶ functions sumvp, sumpv, subvp, subpv, mulrv, mulvr, divvr for adding and subtracting
-!   points and vectors, and for multiplying and dividing vectors with reals.
-! ▶ operators matching these functions.
-! ▶ function distance that calculates the distance between two 3d points.
-! ▶ function angle that calculates the angle between two vectors a and b (in radians).
-! ▶ function normalize that takes a vector a and returns it divided by its length.
-! ▶ function cross product that takes two 3d vectors (a and b) and returns their cross product.
-
 module geometry
     use iso_fortran_env, only: real64
     implicit none
@@ -23,15 +13,15 @@ module geometry
 
     ! Custom operators
     interface operator (+)
-        module procedure sumvp , sumpv
+        module procedure sumvp , sumpv, sumvv
     end interface
 
     interface operator (-)
-        module procedure subvp , subpv
+        module procedure subvp , subpv, subvv, subpp
     end interface
 
     interface operator (*)
-        module procedure mulrv , mulvr
+        module procedure mulrv , mulvr, mulvv
     end interface
 
     interface operator (/)
@@ -53,6 +43,11 @@ module geometry
             sumpv = point3d(a%x + b%x, a%y + b%y, a%z + b%z)
         end function sumpv
 
+        pure type(vector3d) function sumvv(a, b)
+            type(vector3d), intent(in) :: a, b
+            sumvv = vector3d(a%x + b%x, a%y + b%y, a%z + b%z)
+        end function sumvv
+
         ! subtract functions
         pure type(point3d) function subvp(a, b)
             type(vector3d), intent(in) :: a
@@ -66,6 +61,16 @@ module geometry
             subpv = point3d(a%x - b%x, a%y - b%y, a%z - b%z)
         end function subpv
 
+        pure type(vector3d) function subvv(a, b)
+            type(vector3d), intent(in) :: a, b
+            subvv = vector3d(a%x - b%x, a%y - b%y, a%z - b%z)
+        end function subvv
+
+        pure type(vector3d) function subpp(a, b)
+            type(point3d), intent(in) :: a, b
+            subpp = vector3d(a%x - b%x, a%y - b%y, a%z - b%z)
+        end function subpp
+
         ! multiplication functions
         pure type(vector3d) function mulrv(a, b)
             real(real64), intent(in) :: a
@@ -78,7 +83,12 @@ module geometry
             real(real64), intent(in) :: b
             mulvr = vector3d ( a%x * b, a%y * b, a%z * b)
         end function mulvr
-        
+
+        pure type(vector3d) function mulvv(a, b)
+            type(vector3d), intent(in) :: a, b
+            mulvv = vector3d ( a%x * b%x, a%y * b%y, a%z * b%z)
+        end function mulvv
+
         ! division function
         pure type(vector3d) function divvr(a, b)
             type(vector3d), intent(in) :: a
@@ -116,7 +126,6 @@ module geometry
             cross_product%y = a%z*b%x - a%x*b%z
             cross_product%z = a%x*b%y - a%y*b%x
         end function cross_product
-
 
 end module geometry
 
