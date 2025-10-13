@@ -1,0 +1,534 @@
+\input{../common}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\title{Programming Techniques --- Pointers and Derived Types}
+\subtitle{Lecture: Pointers, Dynamic Data, and Derived Types}
+\author{Hannu Parviainen}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section{Allocatable arrays}
+
+\begin{frame}
+	\centering
+	\Huge \textbf{Dynamic Memory Allocation}
+\end{frame}
+
+
+\begin{frame}[fragile]{Static memory allocation}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \begin{block}{Concept}
+      \begin{itemize}
+        \item Array size is fixed at compile time.
+        \item Memory allocated once when the program starts.
+        \item Lifetime = entire execution of the program (or scope).
+        \item Efficient, but inflexible when array size is not known in advance.
+      \end{itemize}
+    \end{block}
+    \column{0.52\textwidth}
+    \lstinputlisting[language=Fortran]{ex01.f90}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Dynamic memory allocation}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \begin{block}{Concept}
+      \begin{itemize}
+        \item Size and shape chosen at runtime.
+        \item Memory allocated with \texttt{allocate}, released with \texttt{deallocate}.
+        \item Lifetime = until explicitly deallocated.
+        \item More flexible, but requires careful management.
+      \end{itemize}
+    \end{block}
+    \column{0.52\textwidth}
+    \lstinputlisting[language=Fortran]{ex02.f90}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Allocatable Arrays in Fortran}
+\begin{block}{Declaration}
+\begin{lstlisting}[language=Fortran]
+integer, dimension(:),   allocatable :: ages
+real,    dimension(:,:), allocatable :: speed
+\end{lstlisting}
+ \end{block}
+ \begin{block}{Allocation}
+\begin{lstlisting}[language=Fortran]
+integer :: isize, ierr
+read *, isize
+
+allocate(ages(isize), stat=ierr)
+if (ierr /= 0) print *, 'ages: allocation failed'
+
+allocate(speed(0:isize-1, 10), stat=ierr)
+if (ierr /= 0) print *, 'speed: allocation failed'
+\end{lstlisting}
+ \end{block}
+ \begin{block}{Note}
+   \texttt{stat} is optional but recommended to detect errors.
+ \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]{Deallocation and Status}
+ \begin{block}{Deallocate}
+\begin{lstlisting}[language=Fortran]
+integer :: ierr
+if (allocated(ages)) deallocate(ages, stat=ierr)
+if (allocated(speed)) deallocate(speed, stat=ierr)
+\end{lstlisting}
+ \end{block}
+ \begin{block}{Guidelines}
+   \begin{itemize}
+     \item Only deallocate allocatable arrays that are currently allocated.
+     \item Prefer checking \texttt{allocated(array)} before deallocation.
+     \item In procedures, deallocate before exit.
+   \end{itemize}
+ \end{block}
+\end{frame}
+
+
+
+\section{Pointers}
+
+\begin{frame}
+	\centering
+	\Huge \textbf{Pointers}
+\end{frame}
+
+\begin{frame}{Fortran Pointers: Introduction}
+  \begin{block}{What is a pointer?}
+    \begin{itemize}
+      \item A \textbf{pointer} is a variable that does not store a value directly,
+            but instead \textbf{points to a memory location}.
+      \item In Fortran, pointers can be associated with
+            \begin{itemize}
+              \item other variables,
+              \item array sections,
+              \item dynamically allocated memory.
+            \end{itemize}
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Why are they useful?}
+    \begin{itemize}
+      \item Enable \textbf{dynamic memory management}
+            (allocate and free memory at runtime).
+      \item Allow multiple variables to \textbf{share the same data}.
+      \item Needed for building \textbf{linked data structures}
+            (lists, trees, graphs).
+      \item Provide flexibility similar to references in modern languages.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}{Python vs.~Fortran Variables}
+  \begin{block}{Key difference}
+    \begin{itemize}
+      \item \textbf{Python variables} are \emph{references} to objects in memory.
+        \begin{itemize}
+          \item Assigning one variable to another does not copy the object.
+          \item Example: \texttt{b = a} makes \texttt{b} point to the same object as \texttt{a}.
+        \end{itemize}
+      \item \textbf{Fortran variables} are normally \emph{values} stored directly.
+        \begin{itemize}
+          \item Assigning one variable to another copies the value.
+          \item No implicit references like in Python.
+        \end{itemize}
+    \end{itemize}
+  \end{block}
+
+  \textbf{Python variables act like Fortran pointers by default}, while plain Fortran variables are independent copies.
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Pointer Declaration}
+  \begin{block}{Definition}
+    \begin{itemize}
+      \item A variable with the \texttt{pointer} attribute.
+      \item Has static type, kind, and rank determined by its declaration.
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Examples}
+\begin{lstlisting}[language=Fortran]
+real, pointer :: ptor
+real, dimension(:,:), pointer :: ptoa
+\end{lstlisting}
+    \begin{itemize}
+      \item \texttt{ptor} is a pointer to a scalar real target.
+      \item \texttt{ptoa} is a pointer to a 2D array of reals.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]{Target Declaration}
+
+  \begin{block}{Targets must have the \texttt{target} attribute}
+\begin{lstlisting}[language=Fortran]
+real, target :: x, y
+real, dimension(5,3), target :: a, b
+real, dimension(3,5), target :: c
+\end{lstlisting}
+    \begin{itemize}
+      \item \texttt{x} or \texttt{y} may become associated with \texttt{ptor}.
+      \item \texttt{a}, \texttt{b}, or \texttt{c} may become associated with \texttt{ptoa}.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Pointer Manipulation}
+  \begin{block}{Operators}
+    \begin{itemize}
+      \item \texttt{=>} pointer assignment: alias pointer with a target.
+      \item \texttt{=} normal assignment: assign value to space pointed at.
+    \end{itemize}
+    Pointer assignment makes the pointer and target reference the same space, while normal assignment changes the value.
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Pointer Assignment}
+\begin{lstlisting}[language=Fortran]
+real, target :: x, y
+real, pointer :: ptor
+
+x = 3.14159
+ptor => y
+ptor = x
+\end{lstlisting}
+  \begin{itemize}
+    \item \texttt{x} and \texttt{ptor} have the same value.
+    \item \texttt{ptor} is an alias for \texttt{y}, so the assignment sets \texttt{y = 3.14159}.
+    \item Changing \texttt{x} later does not change \texttt{ptor} or \texttt{y}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Dynamic Targets}
+
+  \begin{block}{Targets can be created dynamically by allocation}
+\begin{lstlisting}[language=Fortran]
+allocate(ptor, stat=ierr)
+allocate(ptoa(n*n, 2*k-1), stat=ierr)
+\end{lstlisting}
+    \begin{itemize}
+      \item First: allocates a scalar real as target of \texttt{ptor}.
+      \item Second: allocates a rank-2 real array as target of \texttt{ptoa}.
+      \item Re-allocating an already associated pointer is not an error.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Association Status}
+  \begin{block}{Test with \texttt{associated()}}
+\begin{lstlisting}[language=Fortran]
+associated(ptoa)
+associated(ptoa, arr)
+\end{lstlisting}
+    \begin{itemize}
+      \item Returns \texttt{.true.} if pointer is defined and associated.
+      \item Second form tests association with a specific target.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Pointer Disassociation}
+  \begin{block}{Nullification}
+\begin{lstlisting}[language=Fortran]
+nullify(ptor)
+\end{lstlisting}
+    \begin{itemize}
+      \item Breaks pointer–target connection.
+      \item Good practice to nullify before use.
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Deallocation}
+\begin{lstlisting}[language=Fortran]
+deallocate(ptoa, stat=ierr)
+\end{lstlisting}
+    \begin{itemize}
+      \item Breaks connection and deallocates target.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Practical Example}
+\begin{lstlisting}[language=Fortran]
+real, dimension(100,100), target :: app1, app2
+real, dimension(:,:), pointer :: prev_app, next_app, swap
+
+prev_app => app1
+next_app => app2
+prev_app = initial_app(...)
+
+do
+  next_app = iteration_function_of(prev_app)
+  if (abs(maxval(next_app-prev_app))<0.0001) exit
+  swap => prev_app
+  prev_app => next_app
+  next_app => swap
+end do
+\end{lstlisting}
+  \begin{block}{Note}
+    Pointers avoid copying large matrices in iterative algorithms.
+  \end{block}
+\end{frame}
+
+
+
+\section{Derived Types}
+
+\begin{frame}
+	\centering
+	\Huge \textbf{Derived Types}
+\end{frame}
+
+\begin{frame}[fragile]{Derived Types}
+
+\begin{columns}[T]
+  \column{0.5\textwidth}
+  \begin{block}{Example: 3D vector type}
+    \lstinputlisting[firstline=1,lastline=7]{ex_types.f90}
+  \end{block}
+  \begin{itemize}
+  \item Basic Fortran types can be combined to create more complex \textit{derived} types.
+  \item Derived type definitions should be placed in a module.
+  \end{itemize}
+
+  \column{0.5\textwidth}
+  \begin{block}{Example: type usage}
+  \lstinputlisting[firstline=9,lastline=15]{ex_types.f90}
+  \end{block}
+  \begin{itemize}
+  \item Variables are declared using the \texttt{type} statement.
+  \item Type values can be initialised in the same order as they are defined inside the type.
+  \end{itemize}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Supertypes}
+  Previously defined types can be used as components of other derived types.
+\begin{columns}[T,onlytextwidth]
+  \column{0.5\textwidth}
+  \begin{block}{Example: sphere}
+    \lstinputlisting[firstline=1,lastline=10]{ex_types_2.f90}
+  \end{block}
+
+    \column{0.49\textwidth}
+    \begin{block}{Example: sphere usage}
+    \lstinputlisting[firstline=12,lastline=18,basicstyle=\ttfamily\scriptsize]{ex_types_2.f90}
+  \end{block}
+  \end{columns}
+\end{frame}
+
+
+% --- Derived Type Assignment ---
+\begin{frame}[fragile]{Derived type assignment}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+    \begin{block}{Ways to assign}
+      \begin{itemize}
+        \item Component-by-component using \texttt{\%}.
+        \item As a whole object using a constructor.
+        \item Assignment between two objects of the same derived type is intrinsic.
+      \end{itemize}
+      The derived-type component of a composite (e.g., \texttt{sphere\%centre}) must also be set via a constructor.
+    \end{block}
+
+    \column{0.48\textwidth}
+\begin{lstlisting}[language=Fortran]
+! component by component
+pt1%x = 1.0
+p%radius = 3.0
+p%centre%x = 1.0
+
+! whole-object with constructors
+pt1 = vector3d(1., 2., 3.)
+p%centre = vector3d(1., 2., 3.)
+p = sphere(p%centre, 10.)
+p = sphere(vector3d(1.,2.,3.), 10.)
+
+! intrinsic assignment between objects
+ball = p
+\end{lstlisting}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Derived type I/O}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+    \begin{block}{Unformatted I/O}
+      \begin{itemize}
+        \item If a derived type has no pointer or private components, it can be printed/read “normally.”
+        \item I/O proceeds component-by-component in order.
+      \end{itemize}
+      Example equivalence shown at right.
+    \end{block}
+
+    \column{0.48\textwidth}
+\begin{lstlisting}[language=Fortran]
+print *, p
+
+print *, p%centre%x, p%centre%y, &
+         p%centre%z, p%radius
+\end{lstlisting}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Pointer components of derived types}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+    \begin{block}{Allocatable vs pointer}
+      \begin{itemize}
+        \item \texttt{allocatable} arrays cannot be components in a derived type; \texttt{pointer} components can.
+        \item Enables dynamic-size structures such as growable strings.
+      \end{itemize}
+      Example: a vector-of-characters pointer for a simple string type.
+    \end{block}
+
+    \column{0.48\textwidth}
+\begin{lstlisting}[language=Fortran]
+type vstring
+  character, dimension(:), pointer :: chars
+end type vstring
+
+type(vstring) :: pvs1
+! ...
+allocate(pvs1%chars(5))
+pvs1%chars = (/"H","e","l","l","o"/)
+! prints: H e l l o
+\end{lstlisting}
+  \end{columns}
+\end{frame}
+
+
+% \begin{frame}[fragile]{Pointers and recursive data structures}
+%   \begin{columns}[T]
+%     \column{0.52\textwidth}
+%     \begin{block}{Linked lists via pointers}
+%       \begin{itemize}
+%         \item Derived types with pointer components support lists/trees.
+%         \item Note subtle assignment semantics with pointer components:
+%       \end{itemize}
+% \begin{lstlisting}[language=Fortran]
+% type(cell)        :: a
+% type(cell),target :: b
+% a = b
+% ! equivalent to:
+% ! a%val  = b%val
+% ! a%next => b%next
+% \end{lstlisting}
+%       The pointer component is pointer-assigned (\texttt{=>}), not value-copied.
+%     \end{block}
+%
+%     \column{0.48\textwidth}
+% \begin{lstlisting}[language=Fortran]
+% type cell
+%   integer :: val
+%   type(cell), pointer :: next
+% end type cell
+% \end{lstlisting}
+%   \end{columns}
+% \end{frame}
+%
+% \begin{frame}[fragile]{Linked list: construction}
+%   \begin{columns}[T]
+%     \column{0.52\textwidth}
+%     \begin{block}{Idea}
+%       Build a list with a \texttt{head} node, appending values read from input until termination. Pointers avoid copying and give O(1) append by keeping a tail pointer.
+%     \end{block}
+%
+%     \column{0.48\textwidth}
+% \begin{lstlisting}[language=Fortran]
+% program thingy
+%   implicit none
+%   type(cell), target  :: head
+%   type(cell), pointer :: curr, temp
+%   integer :: k
+%
+%   head%val = 0
+%   nullify(head%next)
+%   curr => head
+%   do
+%     read*, k
+%     allocate(temp)
+%     temp%val = k
+%     nullify(temp%next)
+%     curr%next => temp
+%     curr => temp
+%   end do
+% end program thingy
+% \end{lstlisting}
+%   \end{columns}
+% \end{frame}
+%
+% \begin{frame}[fragile]{Linked list: traversal}
+%   \begin{columns}[T]
+%     \column{0.52\textwidth}
+%     \begin{block}{Walk-through}
+%       Traverse from \texttt{head} to the end by following \texttt{next}. Stop when \texttt{next} is disassociated.
+%     \end{block}
+%
+%     \column{0.48\textwidth}
+% \begin{lstlisting}[language=Fortran]
+% curr => head
+% do
+%   print *, curr%val
+%   if (.not. associated(curr%next)) exit
+%   curr => curr%next
+% end do
+% \end{lstlisting}
+%   \end{columns}
+% \end{frame}
+
+
+
+\begin{frame}[fragile]{Arrays of pointers}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+    \begin{block}{Notes}
+      \begin{itemize}
+        \item You can make arrays whose elements are themselves pointers.
+        \item You cannot reference a whole array of pointer components in one go.
+        \item If desired, the array-of-pointers container could be \texttt{allocatable}.
+      \end{itemize}
+      See valid vs. invalid examples at right.
+    \end{block}
+
+    \column{0.48\textwidth}
+\begin{lstlisting}[language=Fortran]
+type iptr
+  integer, pointer :: compon
+end type iptr
+
+type(iptr), dimension(100) :: ints
+
+! ok:
+ints(10)%compon
+
+! not ok (whole array component):
+! ints(:)%compon
+\end{lstlisting}
+  \end{columns}
+\end{frame}
+
+
+\include{l05c_operators}
+
+
+\end{document}

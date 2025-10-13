@@ -1,20 +1,10 @@
-# VSCode
-.vscode/
-*.code-workspace
 
-# Fortran build files  
+# Operative System files (macOS)
+.DS_Store
+
+# Compiled files fortran
 *.o
 *.mod
-*.exe
-*.out
 
-# Ignorar archivos compilados en students
-students/**/*.o
-students/**/*.mod
-students/**/*.exe
-students/**/*.out
-
-# Ejecutables sin extensión
-students/**/array
-students/**/palindrome
-students/**/test_mymath
+# Binary files from exercises inside sandbox folder
+sandbox/*[!.]
