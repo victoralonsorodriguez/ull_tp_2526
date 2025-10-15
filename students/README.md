@@ -31,6 +31,7 @@ Now, after the second lecture, your directory tree should look like:
 
 | Name | Directory |
 |--|--|
+| Victor Alonso Rodriguez | av |
 | Cristina Bolaños Quevedo | cbq |
 | Alvaro Cascales Hernandez | cha |
 | Pablo de Ferra Chermaz | dfp |
@@ -38,7 +39,6 @@ Now, after the second lecture, your directory tree should look like:
 | Angeles Moreno Guedes | ma |
 | Lucía Rodríguez Rodríguez | rl |
 | Daniel Sosa Rodríguez | srd |
-| Victor Alonso Rodriguez | va |
 | José Miguel Martín Pérez | mpj |
 
 ---
