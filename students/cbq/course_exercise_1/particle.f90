@@ -1,4 +1,5 @@
 module particle
+!Creating the particle module that uses the geometry module
 use geometry, only: point3d, vector3d
     implicit none
     type :: particle3d

@@ -1,5 +1,3 @@
-!not modified yet
-
 program leapfrog
     use geometry
     use particle
@@ -14,12 +12,26 @@ program leapfrog
     type(vector3d) :: rji
     type(vector3d), dimension(:), allocatable :: ac
     type(vector3d), dimension(:), allocatable :: accelerations
+    integer :: u, uout, iarg, stat
+    character(len=256) :: filename
+
+    iarg = command_argument_count()
+    if (iarg /= 1) then
+        print *, 'Usage: ./ex1 <input_file>'
+    stop
+    end if
+    
+    call get_command_argument(1, filename)
+    
+    ! Open input file
+    open(newunit=u, file=trim(filename), status='old', iostat=stat)
+
 
     ! Read input parameters
-    read *, dt
-    read *, dt_out  
-    read *, t_end
-    read *, n
+    read (u, *) dt
+    read (u, *) dt_out  
+    read (u, *) t_end
+    read (u, *) n
     
     allocate(particles(n))
     allocate(ac(n))
@@ -27,10 +39,12 @@ program leapfrog
 
     ! First read particle data
     do i = 1, n
-        read *, particles(i)%m, &
-                particles(i)%p%x, particles(i)%p%y, particles(i)%p%z, &
-                particles(i)%v%x, particles(i)%v%y, particles(i)%v%z
+        read(u, *) particles(i)%m, &
+                  particles(i)%p%x, particles(i)%p%y, particles(i)%p%z, &
+                  particles(i)%v%x, particles(i)%v%y, particles(i)%v%z
     end do
+    
+    close(u)
 
     do i = 1, n
         accelerations(i) = vector3d(0.0, 0.0, 0.0)
@@ -47,6 +61,10 @@ program leapfrog
         accelerations(j)= accelerations(j) - ac(j)
         end do
     end do
+
+    !Output file
+    open(newunit=uout, file='output.dat', status='replace', action='write', iostat=stat)
+    
 
     n_steps = int(t_end / dt)
     t_out = 0.0_8
@@ -85,12 +103,16 @@ program leapfrog
         end do
      
      t_out = t_out + dt
-     if (t_out >= dt_out) then
-        do i = 1,n
-           print*, particles(i)%p%x, particles(i)%p%y, particles(i)%p%z
+        if (t_out >= dt_out) then
+            write(uout, '(F12.6)', advance='no') t
+            do i = 1, n
+                write(uout, '(3F15.8)', advance='no') particles(i)%p%x, particles(i)%p%y, particles(i)%p%z
+            end do
+            write(uout, *) 
+            t_out = 0.0
+        end if
         end do
-        t_out = 0.0
-     end if
- end do
-  
+
+    close(uout)
+
 end program leapfrog
