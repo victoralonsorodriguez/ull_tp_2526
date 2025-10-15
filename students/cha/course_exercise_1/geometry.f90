@@ -3,9 +3,9 @@ module geometry
   use iso_fortran_env, only: real64
   implicit none
 
-  !#######################
+  !=======================
   ! Type definitions
-  !#######################
+  !=======================
   type :: vector3d
     real(real64) :: x, y, z
   end type vector3d
@@ -14,9 +14,9 @@ module geometry
     real(real64) :: x, y, z
   end type point3d
 
-  !#######################
+  !=======================
   ! Operator interfaces 
-  !#######################
+  !=======================
   interface operator(+)
     module procedure :: sumvp, sumpv, sumvv
   end interface
@@ -35,11 +35,11 @@ module geometry
 
 contains
 
-  !#######################
+  !=======================
   ! Function implementations 
-  !#######################
+  !=======================
 
-  ! Addition: vector + point
+  ! === Addition: vector + point ===
   function sumvp(v, p) result(r)
     type(vector3d), intent(in) :: v
     type(point3d), intent(in)  :: p
@@ -47,7 +47,7 @@ contains
     r = point3d(v%x + p%x, v%y + p%y, v%z + p%z)
   end function sumvp
 
-  ! Addition: point + vector
+  ! === Addition: point + vector ===
   function sumpv(p, v) result(r)
     type(point3d), intent(in) :: p
     type(vector3d), intent(in) :: v
@@ -55,14 +55,14 @@ contains
     r = point3d(p%x + v%x, p%y + v%y, p%z + v%z)
   end function sumpv
   
-  ! Subtraction: point - point
+  ! === Subtraction: point - point ===
   function subvp(p1, p2) result(r)
     type(point3d), intent(in) :: p1, p2
     type(vector3d) :: r
     r = vector3d(p1%x - p2%x, p1%y - p2%y, p1%z - p2%z)
   end function subvp
 
-  ! Subtraction: point - vector
+  ! === Subtraction: point - vector ===
   function subpv(p, v) result(r)
     type(point3d), intent(in) :: p
     type(vector3d), intent(in) :: v
@@ -70,21 +70,21 @@ contains
     r = point3d(p%x - v%x, p%y - v%y, p%z - v%z)
   end function subpv
 
-  ! Addition: vector + vector
+  ! === Addition: vector + vector ===
   function sumvv(a, b) result(r)
     type(vector3d), intent(in) :: a, b
     type(vector3d) :: r
     r = vector3d(a%x + b%x, a%y + b%y, a%z + b%z)
   end function sumvv
 
-  ! Subtraction: vector - vector
+  ! === Subtraction: vector - vector ===
   function subvv(a, b) result(r)
     type(vector3d), intent(in) :: a, b
     type(vector3d) :: r
     r = vector3d(a%x - b%x, a%y - b%y, a%z - b%z)
   end function subvv
 
-  ! Multiplication: scalar * vector
+  ! === Multiplication: scalar * vector ===
   function mulrv(r_in, v) result(res)
     real(real64), intent(in) :: r_in
     type(vector3d), intent(in) :: v
@@ -92,7 +92,7 @@ contains
     res = vector3d(r_in * v%x, r_in * v%y, r_in * v%z)
   end function mulrv
 
-  ! Multiplication: vector * scalar
+  ! === Multiplication: vector * scalar ===
   function mulvr(v, r_in) result(res)
     type(vector3d), intent(in) :: v
     real(real64), intent(in) :: r_in
@@ -100,7 +100,7 @@ contains
     res = vector3d(v%x * r_in, v%y * r_in, v%z * r_in)
   end function mulvr
 
-  ! Division: vector / scalar
+  ! === Division: vector / scalar ===
   function divvr(v, r_in) result(res)
     type(vector3d), intent(in) :: v
     real(real64), intent(in) :: r_in
@@ -108,14 +108,21 @@ contains
     res = vector3d(v%x / r_in, v%y / r_in, v%z / r_in)
   end function divvr
 
-  ! Calculates the distance between two points
+  ! === Distance between two points ===
   function distance(p1, p2) result(d)
     type(point3d), intent(in) :: p1, p2
     real(real64) :: d
     d = sqrt((p1%x - p2%x)**2 + (p1%y - p2%y)**2 + (p1%z - p2%z)**2)
   end function distance
 
-  ! Calculates the angle between two vectors
+  ! === Squared distance between two points ===
+  function distance2(p1, p2) result(d2)
+    type(point3d), intent(in) :: p1, p2
+    real(real64) :: d2
+    d2 = (p1%x - p2%x)**2 + (p1%y - p2%y)**2 + (p1%z - p2%z)**2
+  end function distance2
+
+  ! === Angle between two vectors ===
   function angle(a, b) result(theta)
     type(vector3d), intent(in) :: a, b
     real(real64) :: theta
@@ -126,20 +133,20 @@ contains
     theta = acos(dotprod / (na * nb))
   end function angle
 
-  ! Normalizes a vector (makes it a unit vector)
+  ! === Normalize a vector ===
   function normalize(a) result(res)
     type(vector3d), intent(in) :: a
     type(vector3d) :: res
     real(real64) :: n
     n = sqrt(a%x**2 + a%y**2 + a%z**2)
-    if (n > 0.0_real64) then
+    if (n > 0.0) then
       res = a / n
     else
-      res = vector3d(0.0_real64, 0.0_real64, 0.0_real64)
+      res = vector3d(0.0, 0.0, 0.0)
     end if
   end function normalize
 
-  ! Calculates the cross product of two vectors
+  ! === Cross product of two vectors ===
   function cross(a, b) result(c)
     type(vector3d), intent(in) :: a, b
     type(vector3d) :: c
@@ -147,6 +154,7 @@ contains
   end function cross
 
 end module geometry
+
 
 
 

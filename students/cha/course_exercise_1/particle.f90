@@ -3,8 +3,6 @@ module particle
   use iso_fortran_env, only: real64
   use geometry
   implicit none
-  private
-  public :: particle3d
 
   type :: particle3d
     real(real64) :: m     ! Particle mass
@@ -13,5 +11,3 @@ module particle
   end type particle3d
 
 end module particle
-
-
