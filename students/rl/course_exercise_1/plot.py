@@ -34,8 +34,9 @@ ax.minorticks_on()
 # determine the limits by flattening and then finding min. and max. values
 x_flat = pos[:, :, 0].flatten()
 y_flat = pos[:, :, 1].flatten()
-ax.set_xlim(x_flat.min(), x_flat)
-ax.set_ylim(y_flat.min(), y_flat.max())
+margin = 0.1*max(x_flat.max() - x_flat.min(), y_flat.max() - y_flat.min())
+ax.set_xlim(x_flat.min() - margin, x_flat + margin)
+ax.set_ylim(y_flat.min() - margin, y_flat.max() + margin)
 
 # set up elements of the plot
 points, = ax.plot([], [], 'o', color='k', markersize=6)
