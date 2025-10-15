@@ -66,7 +66,7 @@ def update(frame):
 anim = FuncAnimation(fig, update, frames=len(time), interval=50, blit=True)
 
 # and save it as a GIF
-anim.save(output, wirter=PillowWriter(fps=20))
+anim.save(output, writer=PillowWriter(fps=20))
 
 plt.close()
 print("Animation saved as {}".format(output))
