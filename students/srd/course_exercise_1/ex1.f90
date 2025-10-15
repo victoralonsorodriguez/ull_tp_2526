@@ -5,7 +5,7 @@ program leapfrog
 
   integer :: i, j
   integer :: n
-  real(kind=8) :: dt, t_end, t, dt_out, t_out
+  real(kind=8) :: dt, t_end, t, dt_out, t_out ! Or with SELECTED_REAL_KIND for more portability
   real(kind=8) :: r2, r3
   
   type(particle3d), allocatable :: p(:) ! We re-define those using the definitions from the modules
@@ -14,18 +14,16 @@ program leapfrog
   character(len=100) :: infile
   integer :: ios, iu
 
-  ! --- Definir directamente el archivo ---
+  ! The name of the input file for the initial conditions
   infile = "input_ex.dat"
 
-  ! --- Abrir el archivo ---
   iu = 10
   open(unit=iu, file=trim(infile), status='old', action='read', iostat=ios)
   if (ios /= 0) then
-     print *, "Error: no se pudo abrir el archivo ", trim(infile)
+     print *, "Error: can't open file ", trim(infile)
      stop
   end if
 
-  ! --- Leer parámetros ---
   read(iu, *) dt 		! In the example input we have the parameters ordered as here
   read(iu, *) dt_out
   read(iu, *) t_end
@@ -34,7 +32,7 @@ program leapfrog
   allocate(p(n))
   allocate(a(n))
 
-  ! --- Read particles (masses, positions and velocities) from the input file ---
+  ! Read particles (masses, positions and velocities) from the input file 
   do i = 1, n
      read(iu, *) p(i)%m, p(i)%p%x, p(i)%p%y, p(i)%p%z, &
                   p(i)%v%x, p(i)%v%y, p(i)%v%z
@@ -42,7 +40,7 @@ program leapfrog
 
   close(iu)
 
-  ! --- Calcular aceleraciones iniciales ---
+  ! Calculating initial acelerations
   a = vector3d(0.0d0, 0.0d0, 0.0d0)
   do i = 1, n
      do j = i + 1, n
@@ -63,28 +61,25 @@ program leapfrog
      end do
   end do
 
-  ! --- Abrir archivo de salida ---
+  ! Creating the output file
   open(unit=20, file="output.dat", status="replace", action="write", iostat=ios)
   if (ios /= 0) then
-     print *, "Error: no se pudo crear output.dat"
+     print *, "Error: can't create output.dat"
      stop
   end if
 
-  ! --- Integración Leapfrog ---
+  ! Integration using Leapfrog method
   t_out = 0.0d0
   do t = 0.0d0, t_end, dt
 
-     ! medio paso de velocidad
      do i = 1, n
         p(i)%v = p(i)%v + (0.5d0 * dt) * a(i)
      end do
 
-     ! paso de posición
      do i = 1, n
         p(i)%p = p(i)%p + dt * p(i)%v
      end do
 
-     ! recalcular aceleraciones
      a = vector3d(0.0d0, 0.0d0, 0.0d0)
      do i = 1, n
         do j = i + 1, n
@@ -105,12 +100,10 @@ program leapfrog
         end do
      end do
 
-     ! medio paso final de velocidad
      do i = 1, n
         p(i)%v = p(i)%v + (0.5d0 * dt) * a(i)
      end do
 
-     ! salida periódica
      t_out = t_out + dt
      if (t_out >= dt_out) then
         write(20,'(F12.6, 999(F12.6))') t, (p(i)%p%x, p(i)%p%y, p(i)%p%z, i=1,n)
