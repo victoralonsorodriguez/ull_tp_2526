@@ -40,7 +40,7 @@ module geometry
 
 ! The sum of a point and a vector is conmutative sumvp=sumpv
 
-    pure type(point3d) function sumpv(p, v) ! The result is a point
+    pure type(point3d) function sumpv(p, v) 
         type(vector3d), intent(in) :: v
         type(point3d), intent(in) :: p
         sumpv = sumvp(v,p) ! We reuse the function
@@ -99,7 +99,7 @@ module geometry
     end function distance
 
 
-    ! Fortran trigonometrics like sin works in radians
+    ! Fortran trigonometrics like sin(), works in radians
 
     pure real(dp)function angle(v1,v2)
         type(vector3d), intent(in) :: v1, v2

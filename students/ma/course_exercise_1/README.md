@@ -1,23 +1,38 @@
 Angeles Moreno Guedes -- ma/course_exercise_1
 
-This code has four files. The main program is ex1.f90 where the leapfrog integration is made
+This code has four files. The main program is ex1.f90, where the leapfrog integration is made.
 The ex1.f90 uses the module geometry that includes several functions to compute vector and points operations.
-And particles module that defines a derived type to descripe the principal characteristics of a particle to describe his movement
+Particles module, that defines a derived type to describe the principal characteristics of a particle to compute its movement
+And a default input.dat file with the initial contidions.
 
-In order to use the code is important to first compile it with the makefile using make in the directory where the code is
+In order to use the code, is important to first compile it with the makefile, using make in the directory where the code is:
 
 `make`
 
-And then if you want to run a test you can use
+And then if you want to run it, in the terminal:
 
-`make test`
+`./ex1 <inputfile name>`
 
-The program has a default input.dat with the initial conditions of the particles time and number of particles
-If you want to change it it is convenient to use the same name input.dat
-Finally the output will be an output.dat with time pos1x pos1y pos1z ....posnx posny posnz that will appear when the program ends in the same
-folder.
+The program has a default input.dat with the initial conditions. It should have the following shape:
 
-Besides the folder has a out.py that create an animation from the data given by output.dat
+dt      (timestep)
+dt_out      (timestep to print the result)
+t       (simulation time)
+n       (number of particles)
+m1 x1 y1 z1 vx1 vy1 vz1        (mass, initial position, initial velocity of particle1)
+.
+.
+.
+mn xn yn zn vxn vyn vzn        (mass, initial position, initial velocity of particlen)
+
+
+Finally, the output will be an output.dat with the following shape:
+
+time    p1x     p1y     p1z     ....    pnx     pny     pnz
+
+It will appear in the same folder when the program ends.
+
+Besides, the folder has a out.py that you can run to make an animation from the data given by output.dat
 
 ![Image](https://github.com/user-attachments/assets/644dc391-e0ab-47bc-a2ec-1a65e1598d31)
 

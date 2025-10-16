@@ -10,46 +10,50 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 
-t,p1x,p1y,p1z,p2x,p2y,p2z,p3x,p3y,p3z = np.loadtxt('output.dat', unpack=True)
+data = np.loadtxt('output.dat')
+t = data[:, 0]
+n_particles = (data.shape[1] - 1) // 3  # We substract the time collumn and then we divide the data by 3 for the particles positions and detect
+# different particles
+
+
+# We separate the coordinates
+
+positions = []
+for i in range(n_particles):
+    x = data[:, 1 + 3*i]
+    y = data[:, 2 + 3*i]
+    z = data[:, 3 + 3*i]
+    positions.append((x, y, z))
 
 fig, ax = plt.subplots()
 
+# We create lines and points for each particle detected
 
-line1, = ax.plot([], [], '-', color='grey', alpha=0.2)
-line2, = ax.plot([], [], '-', color='grey', alpha=0.2)
-line3, = ax.plot([], [], '-', color='grey', alpha=0.2)
+lines = [ax.plot([], [], '-', color='grey', alpha=0.3)[0] for _ in range(n_particles)]
+points = [ax.plot([], [], 'o')[0] for _ in range(n_particles)]
 
-point1, = ax.plot([], [], 'o')
-point2, = ax.plot([], [], 'o')
-point3, = ax.plot([], [], 'o')
-
+# It could be easily done in a 3D plot, but here in our input.dat file our z position is all 0  
 
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 
-
-ax.set_xlim(min(p1x.min(), p2x.min(), p3x.min()) - 1,
-            max(p1x.max(), p2x.max(), p3x.max()) + 1)
-ax.set_ylim(min(p1y.min(), p2y.min(), p3y.min()) - 1,
-            max(p1y.max(), p2y.max(), p3y.max()) + 1)
+# axis limits
+a_x = np.concatenate([p[0] for p in positions])
+a_y = np.concatenate([p[1] for p in positions])
+ax.set_xlim(a_x.min() - 1, a_x.max() + 1)
+ax.set_ylim(a_y.min() - 1, a_y.max() + 1)
 
 def animate(i):
 
-    # En 2D
-    
-    point1.set_data(p1x[i], p1y[i])
-    point2.set_data(p2x[i], p2y[i])
-    point3.set_data(p3x[i], p3y[i])
-    
-    line1.set_data(p1x[:i], p1y[:i])
-    line2.set_data(p2x[:i], p2y[:i])
-    line3.set_data(p3x[:i], p3y[:i])
-
+    for k in range(n_particles):
+        x, y, z = positions[k]
+        lines[k].set_data(x[:i], y[:i])
+        points[k].set_data(x[i], y[i])
     
     ax.set_title(r"$t = %.3f$" % t[i])
   
     
-    return line1, line2, line3, point1, point2, point3
+    return lines,points
 
     
 
