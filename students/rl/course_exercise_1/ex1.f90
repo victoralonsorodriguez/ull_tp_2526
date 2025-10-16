@@ -112,4 +112,8 @@ program leapfrog
     close(output_unit)
     print *, "Simulation complete. Results have been written in file output.dat"
 
+    ! Deallocate before exiting
+    if (allocated(p)) deallocate(p)
+    if (allocated(a)) deallocate(a)
+
     end program leapfrog

@@ -10,13 +10,14 @@
 
 module geometry
     implicit none
+    integer, parameter :: dp = selected_int_kind(9)
 
     type :: vector3d
-        real :: x, y, z
+        real(dp) :: x, y, z
     end type vector3d
 
     type :: point3d
-        real :: x, y, z
+        real(dp) :: x, y, z
     end type point3d
 
     interface operator(+)
@@ -93,7 +94,7 @@ contains
 
     ! mulrv: multiplies a real number by a 3D vector
     pure type(vector3d) function mulrv(r, v)
-        real, intent(in) :: r
+        real(dp), intent(in) :: r
         type(vector3d), intent(in) :: v
         mulrv = vector3d(r*v%x, r*v%y, r*v%z)
     end function mulrv
@@ -101,47 +102,48 @@ contains
     ! mulvr: multiplies a 3D vector by a real number
     pure type(vector3d) function mulvr(v, r)
         type(vector3d), intent(in) :: v
-        real, intent(in) :: r
+        real(dp), intent(in) :: r
         mulvr = vector3d(v%x*r, v%y*r, v%z*r)
     end function mulvr
 
     ! divvr: divides a 3D vector by a real number
-    pure type(vector3d) function divvr(v, r)
+    type(vector3d) function divvr(v, r) ! Removed 'pure' to allow 'print' and 'stop' 
         type(vector3d), intent(in) :: v
-        real, intent(in) :: r
-        if (r == 0.0) then ! NOTA: MAYBE IMPROVE THIS
-            divvr = vector3d(0.0, 0.0, 0.0) ! if someone divides by zero, return this
+        real(dp), intent(in) :: r
+        if (r == 0.0) then 
+            print *, "Error: Dividing a vector by zero is not allowed."
+            stop 1
         else
             divvr = vector3d(v%x/r, v%y/r, v%z/r)
         end if   
     end function divvr
 
     ! distance: returns distance between two 3D points
-    pure real function distance(p1, p2)
+    pure real(dp) function distance(p1, p2)
         type(point3d), intent(in) :: p1, p2
         distance = sqrt((p2%x - p1%x)**2 + (p2%y - p1%y)**2 + (p2%z - p1%z))
     end function distance
         
     ! norm: calculates the norm of a 3D vector
-    pure real function norm(v)
+    pure real(dp) function norm(v)
         type(vector3d), intent(in) :: v
         norm = sqrt(v%x**2 + v%y**2 + v%z**2)
     end function norm
 
     ! normalize: normalizes a 3D vector into a unit vector
-    pure type(vector3d) function normalize(v)
+    type(vector3d) function normalize(v) ! Removed 'pure' because it includes reference to impure procedure 'divvr' 
         type(vector3d), intent(in)  :: v
         normalize = v/norm(v)
     end function normalize
 
     ! dot_prod: calculates the dot product between two 3D vectors
-    pure real function dot_prod(v1, v2)
+    pure real(dp) function dot_prod(v1, v2)
         type(vector3d), intent(in) :: v1, v2
         dot_prod = v1%x*v2%x + v1%y*v2%y + v1%z*v2%z
     end function dot_prod
 
     ! angle: calculates the angle between two 3D vectors (result in radians)
-    pure real function angle(a,b)
+    pure real(dp) function angle(a,b)
         type(vector3d), intent(in)  :: a, b
         angle = acos(dot_prod(a,b)/(norm(a)*norm(b)))
     end function angle
