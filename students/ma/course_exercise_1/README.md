@@ -15,15 +15,14 @@ And then if you want to run it, in the terminal:
 
 The program has a default input.dat with the initial conditions. It should have the following shape:
 
-dt      (timestep)
-dt_out      (timestep to print the result)
-t       (simulation time)
-n       (number of particles)
-m1 x1 y1 z1 vx1 vy1 vz1        (mass, initial position, initial velocity of particle1)
-.
-.
-.
-mn xn yn zn vxn vyn vzn        (mass, initial position, initial velocity of particlen)
+dt    (timestep) <br> 
+dt_out     (timestep to print the result)<br> 
+t     (simulation time)<br> 
+n      (number of particles)<br> 
+m1 x1 y1 z1 vx1 vy1 vz1 (mass, initial position, initial velocity of particle1)<br> 
+.<br>
+.<br>
+mn xn yn zn vxn vyn vzn        (mass, initial position, initial velocity of particlen)<br> 
 
 
 Finally, the output will be an output.dat with the following shape:
