@@ -5,19 +5,22 @@ FC = gfortran
 FFLAGS = -Wall -O2
 
 # Archivos
-MODULE = geometry
+MODULES = geometry particle
 PROGRAM = test_geometry
-OBJS = $(MODULE).o $(PROGRAM).o
+OBJS = $(MODULES:%=%.o) $(PROGRAM).o
 
 # Regla por defecto
 all: $(PROGRAM).exe
 
-# Compilar módulo
-$(MODULE).o: $(MODULE).f90
+# Compilar módulos
+geometry.o: geometry.f90
+	$(FC) $(FFLAGS) -c $<
+
+particle.o: particle.f90 geometry.o
 	$(FC) $(FFLAGS) -c $<
 
 # Compilar programa principal
-$(PROGRAM).o: $(PROGRAM).f90 $(MODULE).o
+$(PROGRAM).o: $(PROGRAM).f90 $(MODULES:%=%.o)
 	$(FC) $(FFLAGS) -c $<
 
 # Enlazar ejecutable
