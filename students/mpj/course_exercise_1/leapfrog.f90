@@ -9,27 +9,30 @@ program leapfrog
   real, dimension(:,:), allocatable :: r,v,a
   real, dimension(3) :: rji
 
-  read *, dt
-  read *, dt_out
-  read *, t_end
-  read *, n
+  read *, dt        ! integration step
+  read *, dt_out    ! time between two positions prints
+  read *, t_end     ! total time of the simulation
+  read *, n         ! number of particles
 
-  allocate(m(n))
-  allocate(r(n,3))
-  allocate(v(n,3))
-  allocate(a(n,3))
-
+  ! Assingment of dynamical memory
+  allocate(m(n))    ! masses
+  allocate(r(n,3))  ! positions
+  allocate(v(n,3))  ! velocities
+  allocate(a(n,3))  ! accelerations
+  
+  ! Reading all the properties of the particles
   do i = 1, n
      read *, m(i), r(i,:),v(i,:)
   end do
 
+  ! Calculate the initial acceleration
   a = 0.0
   do i = 1,n
      do j = i+1,n
         rji = r(j,:) - r(i,:)
         r2 = sum(rji**2)
         r3 = r2 * sqrt(r2)
-        a(i,:) = a(i,:) + m(j) * rji / r3
+        a(i,:) = a(i,:) + m(j) * rji / r3    ! Newton force
         a(j,:) = a(j,:) - m(i) * rji / r3
      end do
   end do
