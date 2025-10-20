@@ -44,7 +44,7 @@ program leapfrog
   close(iu)
 
   ! Calculating initial acelerations
-  a = vector3d(0.0, 0.0, 0.0)
+  a = vector3d(0.0_bit64, 0.0_bit64, 0.0_bit64)
   do i = 1, n
      do j = i + 1, n
         rji%x = p(j)%p%x - p(i)%p%x
@@ -69,18 +69,18 @@ program leapfrog
   end if
 
   ! Integration using Leapfrog method
-  t_out = 0.0
-  do t = 0.0, t_end, dt
+  t_out = 0.0_bit64
+  do t = 0.0_bit64, t_end, dt
 
      do i = 1, n
-        p(i)%v = p(i)%v + (0.5 * dt) * a(i)
+        p(i)%v = p(i)%v + (0.5_bit64 * dt) * a(i)
      end do
 
      do i = 1, n
         p(i)%p = p(i)%p + dt * p(i)%v
      end do
 
-     a = vector3d(0.0, 0.0, 0.0)
+     a = vector3d(0.0_bit64, 0.0_bit64, 0.0_bit64)
      do i = 1, n
         do j = i + 1, n
         
@@ -97,13 +97,13 @@ program leapfrog
      end do
 
      do i = 1, n
-        p(i)%v = p(i)%v + (0.5 * dt) * a(i)
+        p(i)%v = p(i)%v + (0.5_bit64 * dt) * a(i)
      end do
 
      t_out = t_out + dt
      if (t_out >= dt_out) then
         write(20,'(F12.6, 999(F12.6))') t, (p(i)%p%x, p(i)%p%y, p(i)%p%z, i=1,n)
-        t_out = 0.0
+        t_out = 0.0_bit64
      end if
 
   end do
