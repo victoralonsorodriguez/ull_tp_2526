@@ -47,6 +47,10 @@ program ex1
   end do
 
   close(outunit)
+  
+  ! Deallocate arrays for good memory management practice
+  deallocate(particles)
+  deallocate(accelerations)
 
 contains
 
@@ -78,7 +82,7 @@ contains
     logical, intent(in), optional :: use_smoothing
     real(kind=dp), parameter :: eps = 0.2_dp
     type(vector3d) :: rji, a_i
-    real(kind=dp) :: r2, r3
+    real(kind=dp) :: r, r3
     integer :: i, j
     logical :: smooth
 
@@ -90,13 +94,13 @@ contains
        do j = 1, n
           if (i /= j) then
              rji = particles(j)%p - particles(i)%p
+             ! Use distance function from geometry module
+             r = distance(particles(i)%p, particles(j)%p)
              if (smooth) then
-                r2 = rji%x**2 + rji%y**2 + rji%z**2 + eps**2 ! Adding smoothing if needed
-             else
-                r2 = rji%x**2 + rji%y**2 + rji%z**2
+                r = sqrt(r**2 + eps**2) ! Adding smoothing if needed
              end if
-             r3 = r2 * sqrt(r2)
-             if (r3 > 0.0_dp) then
+             r3 = r**3
+             if (r > 0.0_dp) then
                 a_i = a_i + (particles(j)%m / r3) * rji
              end if
           end if

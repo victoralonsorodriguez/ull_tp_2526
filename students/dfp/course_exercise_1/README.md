@@ -42,8 +42,8 @@ A critical aspect of this project is the dramatic performance difference between
 
 | Language | Disk Simulation Time | Performance Ratio |
 |----------|---------------------|-------------------|
-| **Fortran** | **94 seconds** | **1x (baseline)** |
-| **Python** | **34 minutes 40 seconds** | **~22x slower** |
+| **Fortran** | **11 minutes 41 seconds** | **1x (baseline)** |
+| **Python** | **34 minutes 40 seconds** | **~3x slower** |
 
 ### Analysis
 

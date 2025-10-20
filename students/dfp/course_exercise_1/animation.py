@@ -18,7 +18,7 @@ plt.rcParams.update({
     'axes.edgecolor': 'white'
 })
 
-suffix = '_random'
+suffix = '_disk'
 # === Configuration ===
 filename = f"output{suffix}.dat"
 interval_ms = 50   # delay between frames

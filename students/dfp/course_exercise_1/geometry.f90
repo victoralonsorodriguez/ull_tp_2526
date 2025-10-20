@@ -4,7 +4,7 @@ module geometry
     public :: vector3d, point3d, dp
     public :: operator(+), operator(-), operator(*), operator(/)
     public :: distance, angle, normalize, crossv
-    integer, parameter :: dp = kind(1.0d0)
+    integer, parameter :: dp = selected_real_kind(15, 307)
 
     type :: vector3d
         real(kind=dp) :: x, y, z
