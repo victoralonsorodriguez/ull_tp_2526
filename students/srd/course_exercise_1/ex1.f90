@@ -44,7 +44,7 @@ program leapfrog
   close(iu)
 
   ! Calculating initial acelerations
-  a = vector3d(0.0d0, 0.0d0, 0.0d0)
+  a = vector3d(0.0, 0.0, 0.0)
   do i = 1, n
      do j = i + 1, n
         rji%x = p(j)%p%x - p(i)%p%x
@@ -54,13 +54,10 @@ program leapfrog
         r2 = rji%x**2 + rji%y**2 + rji%z**2
         r3 = r2 * sqrt(r2)
 
-        a(i)%x = a(i)%x + p(j)%m * rji%x / r3
-        a(i)%y = a(i)%y + p(j)%m * rji%y / r3
-        a(i)%z = a(i)%z + p(j)%m * rji%z / r3
+        a(i) = a(i) + (p(j)%m / r3) * rji
 
-        a(j)%x = a(j)%x - p(i)%m * rji%x / r3
-        a(j)%y = a(j)%y - p(i)%m * rji%y / r3
-        a(j)%z = a(j)%z - p(i)%m * rji%z / r3
+        a(j) = a(j) - (p(i)%m / r3) * rji
+
      end do
   end do
 
@@ -72,45 +69,41 @@ program leapfrog
   end if
 
   ! Integration using Leapfrog method
-  t_out = 0.0d0
-  do t = 0.0d0, t_end, dt
+  t_out = 0.0
+  do t = 0.0, t_end, dt
 
      do i = 1, n
-        p(i)%v = p(i)%v + (0.5d0 * dt) * a(i)
+        p(i)%v = p(i)%v + (0.5 * dt) * a(i)
      end do
 
      do i = 1, n
         p(i)%p = p(i)%p + dt * p(i)%v
      end do
 
-     a = vector3d(0.0d0, 0.0d0, 0.0d0)
+     a = vector3d(0.0, 0.0, 0.0)
      do i = 1, n
         do j = i + 1, n
+        
            rji%x = p(j)%p%x - p(i)%p%x
            rji%y = p(j)%p%y - p(i)%p%y
            rji%z = p(j)%p%z - p(i)%p%z
+           r2  = mulvv(rji, rji)
+           r3  = r2 * sqrt(r2)
 
-           r2 = rji%x**2 + rji%y**2 + rji%z**2
-           r3 = r2 * sqrt(r2)
+           a(i) = a(i) + (p(j)%m / r3) * rji
+           a(j) = a(j) - (p(i)%m / r3) * rji
 
-           a(i)%x = a(i)%x + p(j)%m * rji%x / r3
-           a(i)%y = a(i)%y + p(j)%m * rji%y / r3
-           a(i)%z = a(i)%z + p(j)%m * rji%z / r3
-
-           a(j)%x = a(j)%x - p(i)%m * rji%x / r3
-           a(j)%y = a(j)%y - p(i)%m * rji%y / r3
-           a(j)%z = a(j)%z - p(i)%m * rji%z / r3
         end do
      end do
 
      do i = 1, n
-        p(i)%v = p(i)%v + (0.5d0 * dt) * a(i)
+        p(i)%v = p(i)%v + (0.5 * dt) * a(i)
      end do
 
      t_out = t_out + dt
      if (t_out >= dt_out) then
         write(20,'(F12.6, 999(F12.6))') t, (p(i)%p%x, p(i)%p%y, p(i)%p%z, i=1,n)
-        t_out = 0.0d0
+        t_out = 0.0
      end if
 
   end do

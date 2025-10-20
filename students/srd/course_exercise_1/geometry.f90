@@ -141,8 +141,7 @@ contains
     real(kind=bit64) :: res
     res = sqrt(mulvv(v,v))
   end function norm
-
-
+  
   ! Angle (radians) between two vectors
   pure function angle(a,b) result(theta) ! in radians
     type(vector3d), intent(in) :: a,b
