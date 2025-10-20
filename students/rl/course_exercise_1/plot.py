@@ -5,8 +5,7 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 
 # Names of the files
 input = "output.dat" # ex1 output
-output = "simulation_circular.gif" # name of the animation output from this script
-#PENDING: ask the user for the name of the gif? or maybe take it from command line? 
+output = "simulation.gif" # name of the animation output from this script
 
 # Each line of the ex1 output has been formatted to have the form:
 # time p1x p1y p1z p2x p2y p2z ... pnx pny pnz
@@ -15,13 +14,11 @@ time = data[:, 0] # shape: [frames]
 pos = data[:, 1:] # shape: [frames, 1+3*n], where n is the num of particles
 
 n = pos.shape[1]//3 # number of particles
-# print(10 // 3)
 
 # Structure the positions a little better/clearer:
 pos = pos.reshape(len(time), n, 3) # now pos[frame, particle, coordinate]
 # example: pos[3, 0, 1] will be the x coordinate of particle 1 at frame 4
 
-# PENDING: MAYBE MAKE IT POSSIBLE TO ALSO PLOT IN 3D, in case z and vz are given as non-zero
 
 # With this, we can set up the 2D plot
 fig, ax = plt.subplots(figsize=(6, 6))

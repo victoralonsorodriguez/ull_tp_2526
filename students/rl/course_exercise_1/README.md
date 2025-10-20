@@ -83,11 +83,14 @@ m2 x2 y2 z2 vx2 vy2 vz2
 mn xn yn zn vxn vyn vzn
 ```
 
+Once you have written your input file, it is advised to save it in the 'ics' folder. 
+
 4. Run the simulation
 ```
-./ex1 input_file.txt
+./ex1 ics/input_file.txt
 ```
 5. Visualize the results 
 ```
 python plot.py
 ```
+Once you have done that, the animation will be saved as 'simulation.gif'.
