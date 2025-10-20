@@ -1,11 +1,13 @@
 module geometry
     implicit none
     
+    integer, parameter :: bit64 = SELECTED_REAL_KIND(p=15, r=307) ! Defining our desired precision (64 bits) allowing full portability, instead of just using "kind=8"
+      
     type point3d
-     real(kind=8) :: x,y,z ! or with selected_kind for the program to be portable 
+     real(kind=bit64) :: x,y,z ! Using our defined precision
     end type point3d
     type vector3d
-     real(kind=8) :: x,y,z ! or with selected_kind for the program to be portable 
+     real(kind=bit64) :: x,y,z 
     end type vector3d   
 
     ! Definition of operators to simplify the code
@@ -23,8 +25,10 @@ module geometry
     end interface
 
 contains
-
-  ! Sum V+P
+  
+  ! In all of the functions below we use the types "point3d" and "vector3d" as points and vectors with 3 components, making the code easier to read (and write).
+  
+  ! Sum Vector + Point
   pure function sumvp(v, p) result(res)
     type(vector3d), intent(in) :: v
     type(point3d), intent(in)  :: p
@@ -35,7 +39,7 @@ contains
     res%z = p%z + v%z
   end function sumvp
 
-  ! Sum P+V
+  ! Sum Point + Vector (same result, different input order)
   pure function sumpv(p, v) result(res)
     type(point3d), intent(in)  :: p
     type(vector3d), intent(in) :: v
@@ -46,7 +50,7 @@ contains
     res%z = p%z + v%z
   end function sumpv
 
-  ! Subtract vector - point
+  ! Subtract Vector - Point
   pure function subvp(v, p) result(res)
     type(vector3d), intent(in) :: v
     type(point3d), intent(in)  :: p
@@ -57,7 +61,7 @@ contains
     res%z = v%z - p%z
   end function subvp
 
-  ! Substract point - vector
+  ! Substract Point - Vector
   pure function subpv(p, v) result(res)
     type(point3d), intent(in)  :: p
     type(vector3d), intent(in) :: v
@@ -68,9 +72,9 @@ contains
     res%z = p%z - v%z
   end function subpv
 
-  ! Product of real and vector
+  ! Product of real number and vector
   pure function mulrv(r, v) result(res)
-    real(kind=8), intent(in)  :: r
+    real(kind=bit64), intent(in)  :: r
     type(vector3d), intent(in) :: v
     type(vector3d) :: res
     res%x = r*v%x
@@ -78,9 +82,9 @@ contains
     res%z = r*v%z
   end function mulrv
   
-! Product of vector and real
+! Product of vector and real number (same result, different input order)
   pure function mulvr(v, r) result(res)
-    real(kind=8), intent(in)  :: r
+    real(kind=bit64), intent(in)  :: r
     type(vector3d), intent(in) :: v
     type(vector3d) :: res
     res%x = r*v%x
@@ -90,7 +94,7 @@ contains
 
 ! Division of vector and real
   pure function divvr(v, r) result(res)
-    real(kind=8), intent(in)  :: r
+    real(kind=bit64), intent(in)  :: r
     type(vector3d), intent(in) :: v
     type(vector3d) :: res
     res%x = v%x / r
@@ -120,7 +124,7 @@ contains
   ! Distance between two points
   pure function distance(p1, p2) result(d) ! distance in same units as given
     type(point3d), intent(in) :: p1, p2
-    real(kind=8) :: d 
+    real(kind=bit64) :: d 
 
     d = sqrt((p1%x - p2%x)**2 + (p1%y - p2%y)**2 + (p1%z - p2%z)**2)
   end function distance
@@ -128,13 +132,13 @@ contains
   !Two more useful functions are mulvv and norm
   pure function mulvv(a,b) result(res) ! scalar product of two vectors
     type(vector3d), intent(in) :: a,b
-    real(kind=8) :: res
+    real(kind=bit64) :: res
     res = a%x*b%x + a%y*b%y + a%z*b%z
   end function mulvv
 
   pure function norm(v) result(res)
     type(vector3d), intent(in) :: v
-    real(kind=8) :: res
+    real(kind=bit64) :: res
     res = sqrt(mulvv(v,v))
   end function norm
 
@@ -142,7 +146,7 @@ contains
   ! Angle (radians) between two vectors
   pure function angle(a,b) result(theta) ! in radians
     type(vector3d), intent(in) :: a,b
-    real(kind=8) :: theta
+    real(kind=bit64) :: theta
     if (norm(a)*norm(b) /= 0.0d0) then
         theta = acos( mulvv(a,b) / (norm(a)*norm(b)) ) !using the formula of the angle between two vectors
     else
@@ -171,4 +175,3 @@ contains
   end function cross_product
 
 end module geometry
-

@@ -5,8 +5,9 @@ program leapfrog
 
   integer :: i, j
   integer :: n
-  real(kind=8) :: dt, t_end, t, dt_out, t_out ! Or with SELECTED_REAL_KIND for more portability
-  real(kind=8) :: r2, r3
+
+  real(kind=bit64) :: dt, t_end, t, dt_out, t_out ! With our defined precision of 64 bits (in geometry module)
+  real(kind=bit64) :: r2, r3
   
   type(particle3d), allocatable :: p(:) ! We re-define those using the definitions from the modules
   type(vector3d), allocatable :: a(:)
@@ -31,6 +32,8 @@ program leapfrog
 
   allocate(p(n))
   allocate(a(n))
+
+  ! In this code we just made the appropiate changes of the old leapfrog code to make it work with the new modules "geometry" and "particles"
 
   ! Read particles (masses, positions and velocities) from the input file 
   do i = 1, n
@@ -115,4 +118,3 @@ program leapfrog
   close(20)
 
 end program leapfrog
-

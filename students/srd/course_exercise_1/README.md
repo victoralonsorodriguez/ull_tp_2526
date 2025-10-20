@@ -10,3 +10,5 @@ The program consists in three different files:
 -The code contained in the file "ex1" is the one that actually gives us the evolution of the particles with the Leapfrog method, reading the initial values from "input_ex.dat" and giving the results (with the format: time p1x p1y p1z ... pnx pny pnz) in "output.dat".
 
 The compilation can be done with "make" using the provided Makefile to automatically build all modules and the executable.
+
+Finally, two .gif files are provided, with animations (made with python) showing the evolution of the particles (both with and without trails).
