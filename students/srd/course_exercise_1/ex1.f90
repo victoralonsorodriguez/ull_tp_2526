@@ -117,4 +117,7 @@ program leapfrog
 
   close(20)
 
+  deallocate(p)
+  deallocate(a)
+
 end program leapfrog
