@@ -67,19 +67,6 @@ make
 make clean
 ```
 
-### Python Version
-
-```bash
-# Generate initial configurations
-python setup.py
-
-# Run the simulation
-python ex1.py
-
-# Create animations
-python animation.py
-```
-
 ## Simulation Parameters
 
 Key parameters in setup files:
