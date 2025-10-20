@@ -1,4 +1,4 @@
-! Another version of ex1.f90 with some structural improvements
+! Another version of ex1.f90 with structural improvements
 program ex1v2
 
     use iso_fortran_env, only: real64
@@ -30,7 +30,6 @@ program ex1v2
     call get_command_argument(1, input_filename)
 
     ! Open files using modern syntax with automatic unit assignment
-    ! instead of the old one (assigning a number to each file)
     open(newunit=unit_in, file=trim(input_filename), status='old', action='read')
     open(newunit=unit_out, file='output.dat', status='replace', action='write')
 
@@ -122,7 +121,10 @@ program ex1v2
       do i = 1, n
         do j = i + 1, n
           rij = particles(j)%p - particles(i)%p ! what is really happening is rij = subvp(particles(j)%p, particles(i)%p)
-          r2 = rij%x**2 + rij%y**2 + rij%z**2
+          
+          ! Calculate the squared distance using the function from the geometry module 
+          r2 = distance2(particles(j)%p, particles(i)%p)
+          
           r3 = (r2 + epsilon2)**(1.5_dp)
           
           a(i) = a(i) + (particles(j)%m / r3) * rij
