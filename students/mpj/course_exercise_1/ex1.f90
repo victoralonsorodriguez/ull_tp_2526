@@ -58,7 +58,7 @@ program leapfrog
         end do
      end do
      
-     do i = 1, none
+     do i = 1, n
        particles(i)%v = particles(i)%v + a(i) * (dt / 2.0_8)
      end do
      
