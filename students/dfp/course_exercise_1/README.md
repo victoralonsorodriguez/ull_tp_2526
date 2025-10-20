@@ -19,7 +19,7 @@ The simulation uses the leapfrog integration method to solve the N-body problem,
 - **`animation.py`** - Python script to create animated visualizations
 - **`makefile`** - Build system for Fortran components
 
-### Data Files
+### Data Files (not uploaded)
 - **`setup_*.dat`** - Initial particle configurations (disk, random, hannu)
 - **`output_*.dat`** - Simulation output data
 - **`animation_*.gif`** - Generated animation files
