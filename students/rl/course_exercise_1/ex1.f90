@@ -8,7 +8,7 @@ program leapfrog
 
     integer :: i, j, n
     real :: dt, t_end, t, dt_out, t_out
-    real :: r2, r3
+    real :: rs, r3
     type(vector3d) :: rji
     type(particle3d), allocatable :: p(:)
     type(vector3d), allocatable :: a(:)
@@ -53,8 +53,8 @@ program leapfrog
         do j = i+1,n
             ! for each unique pair of particles (i,j) (no double-counting):
             rji = p(j)%p - p(i)%p ! vector from i to j
-            r2 = rji%x**2 + rji%y**2 + rji%z**2
-            r3 = r2*sqrt(r2)
+            rs = distance(p(i)%p, p(j)%p)
+            r3 = rs**3
             a(i) = a(i) + (p(j)%m/r3)*rji
             a(j) = a(j) - (p(i)%m / r3)*rji
         end do
@@ -81,9 +81,10 @@ program leapfrog
         a = vector3d(0.0, 0.0, 0.0)
         do i = 1, n
             do j = i+1, n
-                rji = p(j)%p - p(i)%p
-                r2 = rji%x**2 + rji%y**2 + rji%z**2
-                r3 = r2*sqrt(r2)
+                ! vector from particle i to particle j
+                rji = p(j)%p - p(i)%p 
+                rs = distance(p(i)%p, p(j)%p)
+                r3 = rs**3
                 a(i) = a(i) + (p(j)%m / r3)*rji
                 a(j) = a(j) - (p(i)%m / r3)*rji
             end do
