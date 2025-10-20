@@ -50,23 +50,7 @@ A critical aspect of this project is the dramatic performance difference between
 The performance difference demonstrates several key concepts:
 
 1. **Compiled vs Interpreted**: Fortran is compiled to optimized machine code, while Python is interpreted
-2. **Memory Management**: Fortran uses static arrays with predictable memory access patterns
-3. **Loop Optimization**: Fortran compilers can heavily optimize nested loops, crucial for O(N²) force calculations
-4. **Numerical Libraries**: While Python uses NumPy (which is fast), the overhead of Python function calls becomes significant in tight loops
-
-### When to Use Each
-
-**Use Fortran when:**
-- Maximum performance is critical
-- Working with large-scale simulations (N > 10,000 particles)
-- Running production scientific codes
-- Memory usage must be minimized
-
-**Use Python when:**
-- Rapid prototyping and development
-- Interactive analysis and visualization
-- Integration with scientific Python ecosystem
-- Educational purposes and code readability
+2. **Loop Optimization**: Fortran compilers can heavily optimize nested loops, crucial for O(N²) force calculations
 
 ## Building and Running
 
@@ -110,18 +94,16 @@ The project includes 3D animation capabilities:
 - Particle trajectories over time
 - Configurable viewing angles and zoom
 - Export to GIF format
-- Dark theme optimized for astrophysical visualization
 
 ## Dependencies
 
 ### Fortran
 - `gfortran` compiler
-- Standard Fortran 2008+ features
 
 ### Python
 - `numpy` - Numerical computations
 - `matplotlib` - Plotting and animation
-- `tqdm` - Progress bars
+- `tqdm` - Progress bars (optional)
 
 ## Educational Value
 
@@ -130,7 +112,6 @@ This project serves as an excellent demonstration of:
 - Performance considerations in scientific computing
 - Language trade-offs for computational problems
 - Modern Fortran programming practices
-- Scientific Python ecosystem usage
 
 ## Future Enhancements
 
