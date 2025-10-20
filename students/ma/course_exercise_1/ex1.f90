@@ -4,7 +4,7 @@ program ex1
   implicit none
 
   integer :: i, j
-  integer :: n ! Number of particules
+  integer :: n ! Number of particles
   real(dp) :: dt, t_end, t, dt_out, t_out
   real(dp) :: rs, r3
   integer :: ierr ! This is to check and deallocate
