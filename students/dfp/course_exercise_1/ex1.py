@@ -3,13 +3,13 @@ from time import time
 from tqdm import tqdm
 
 # ===============================================================
-# 1. Read the setup file (same format as your generator)
+# 1. Read the setup file
 # ===============================================================
 def read_setup(filename):
     with open(filename, "r") as f:
         lines = [l for l in f if l.strip() and not l.strip().startswith("!")]
     dt = float(lines[0].split()[0])
-    dt_out = float(lines[1].split()[0])  # not used here
+    dt_out = float(lines[1].split()[0])
     t_end = float(lines[2].split()[0])
     n = int(lines[3].split()[0])
     data = np.loadtxt(lines[4:], dtype=float)
@@ -33,13 +33,12 @@ def compute_accelerations(pos, m, eps=0.2):
     return a
 
 # ===============================================================
-# 3. Run the simulation (no file output)
+# 3. Run the simulation
 # ===============================================================
 def nbody_simulation(setup_file="setup_disk.dat"):
     dt, dt_out, t_end, n, m, pos, vel = read_setup(setup_file)
     nstep = int(t_end / dt)
 
-    # Initial accelerations + half-step velocities (leapfrog)
     acc = compute_accelerations(pos, m)
     vel += 0.5 * dt * acc
 
@@ -54,5 +53,4 @@ def nbody_simulation(setup_file="setup_disk.dat"):
     print(f"\nSimulation done in {elapsed:.3f} s "
           f"({n} particles, {nstep} steps).")
 
-if __name__ == "__main__":
-    nbody_simulation("setup_disk.dat")
+nbody_simulation("setup_disk.dat")
