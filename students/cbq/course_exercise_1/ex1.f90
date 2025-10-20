@@ -12,7 +12,7 @@ program leapfrog
     type(vector3d) :: rji
     type(vector3d), dimension(:), allocatable :: ac
     type(vector3d), dimension(:), allocatable :: accelerations
-    integer :: u, uout, iarg, stat
+    integer :: u, uout, iarg, stat  !for the input and output files
     character(len=256) :: filename
 
     iarg = command_argument_count()
@@ -25,7 +25,6 @@ program leapfrog
     
     ! Open input file
     open(newunit=u, file=trim(filename), status='old', iostat=stat)
-
 
     ! Read input parameters
     read (u, *) dt
@@ -65,14 +64,13 @@ program leapfrog
     !Output file
     open(newunit=uout, file='output.dat', status='replace', action='write', iostat=stat)
     
-
+    
     n_steps = int(t_end / dt)
     t_out = 0.0_8
     t = 0.0_8
 
     do k = 0, n_steps
         t = k * dt
-       
         do i = 1, n
             particles(i)%v = particles(i)%v + accelerations(i) * (dt/2.0_8)
         end do
