@@ -20,11 +20,11 @@ module geometry
 
     ! Operators matching functions defined below 
     interface operator(+)
-        module procedure sumvp, sumpv
+        module procedure sumvp, sumpv, sumvv
     end interface
 
     interface operator(-)
-        module procedure subvp, subpv
+        module procedure subvp, subpv, subvv, subpp
     end interface
 
     interface operator(*)
@@ -64,6 +64,18 @@ contains
         res%z = point%z + vector%z
     end function sumpv
 
+    ! vector + vector = vector
+    function sumvv(vector1, vector2) result(res)
+        implicit none
+        type(vector3d), intent(in) :: vector1
+        type(vector3d), intent(in) :: vector2
+
+        type(vector3d) :: res
+        res%x = vector1%x + vector2%x
+        res%y = vector1%y + vector2%y
+        res%z = vector1%z + vector2%z
+    end function sumvv
+
     ! vector - point
     function subvp(vector, point) result(res)
         implicit none
@@ -87,6 +99,30 @@ contains
         res%y = point%y - vector%y
         res%z = point%z - vector%z
     end function subpv
+
+    ! vector - vector = vector
+    function subvv(vector1, vector2) result(res)
+        implicit none
+        type(vector3d), intent(in) :: vector1
+        type(vector3d), intent(in) :: vector2
+
+        type(vector3d) :: res
+        res%x = vector1%x - vector2%x
+        res%y = vector1%y - vector2%y
+        res%z = vector1%z - vector2%z
+    end function subvv
+
+    ! point - point = vector
+    function subpp(point1, point2) result(res)
+        implicit none
+        type(point3d), intent(in) :: point1
+        type(point3d), intent(in) :: point2
+
+        type(vector3d) :: res
+        res%x = point1%x - point2%x
+        res%y = point1%y - point2%y
+        res%z = point1%z - point2%z
+    end function subpp
 
     ! real * vector
     function mulrv(num, vector) result(res)
