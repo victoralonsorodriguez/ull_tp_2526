@@ -102,15 +102,28 @@ program ex1v2
     ! SUBROUTINE to compute accelerations for all particles
     !====================================================================
 
-    subroutine compute_accelerations(particles, a, n)
-
+    subroutine compute_accelerations(particles, a, n, use_softening, epsilon2)
+      implicit none
       integer, intent(in) :: n
       type(particle3d), intent(in) :: particles(n)
       type(vector3d), intent(out) :: a(n)
-      
+      logical, intent(in), optional :: use_softening
+      real(dp), intent(in), optional :: epsilon2
+
       integer :: i, j
       type(vector3d) :: rij
       real(dp) :: r2, r3
+      logical :: soften
+      real(dp) :: eps2_val
+
+      ! We configure the default softening values. 
+      ! For the simulation with the input.dat provided, 
+      ! this is unnecessary, so we leave it set to false
+      soften = .false.
+      eps2_val = 0.0_dp
+
+      if (present(use_softening)) soften = use_softening
+      if (present(epsilon2)) eps2_val = epsilon2
 
       ! Reset accelerations to zero
       do i = 1, n
@@ -120,18 +133,22 @@ program ex1v2
       ! Compute acceleration of each particle due to all others
       do i = 1, n
         do j = i + 1, n
-          rij = particles(j)%p - particles(i)%p ! what is really happening is rij = subvp(particles(j)%p, particles(i)%p)
-          
-          ! Calculate the squared distance using the function from the geometry module 
+          rij = particles(j)%p - particles(i)%p
+
+          ! Calculate squared distance
           r2 = distance2(particles(j)%p, particles(i)%p)
-          
-          r3 = (r2 + epsilon2)**(1.5_dp)
-          
+
+          if (soften) then
+            r3 = (r2 + eps2_val)**(1.5_dp)
+          else
+            r3 = r2**(1.5_dp)
+          end if
+
           a(i) = a(i) + (particles(j)%m / r3) * rij
           a(j) = a(j) - (particles(i)%m / r3) * rij
         end do
       end do
-      
-    end subroutine compute_accelerations
+
+  end subroutine compute_accelerations
 
 end program ex1v2
