@@ -6,11 +6,16 @@ FFLAGS = -Wall -O2
 
 # Archivos
 MODULES = geometry particle
-PROGRAM = test_geometry
-OBJS = $(MODULES:%=%.o) $(PROGRAM).o
+PROGRAM = ex1
+OBJECTS = $(MODULES:%=%.o) $(PROGRAM).o
+EXEC = ex1
+
+# Archivos de entrada/salida
+INPUT = input.dat
+OUTPUT = output.dat
 
 # Regla por defecto
-all: $(PROGRAM).exe
+all: $(EXEC) run
 
 # Compilar módulos
 geometry.o: geometry.f90
@@ -19,14 +24,20 @@ geometry.o: geometry.f90
 particle.o: particle.f90 geometry.o
 	$(FC) $(FFLAGS) -c $<
 
-# Compilar programa principal
-$(PROGRAM).o: $(PROGRAM).f90 $(MODULES:%=%.o)
+# Cómo compilar el ejecutable
+$(EXEC): $(OBJECTS)
+	$(FC) $(FFLAGS) -o $@ $(OBJECTS)
+
+# Cómo compilar los módulos y el main
+%.o: %.f90
 	$(FC) $(FFLAGS) -c $<
 
-# Enlazar ejecutable
-$(PROGRAM).exe: $(OBJS)
-	$(FC) $(FFLAGS) -o $@ $(OBJS)
+# Ejecutar el programa con los datos
+run: $(EXEC) $(INPUT)
+	@echo ">>> Ejecutando $(EXEC) con $(INPUT)..."
+	$(EXEC) < $(INPUT) > $(OUTPUT)
+	@echo ">>> Resultado guardado en $(OUTPUT)"
 
 # Limpiar archivos intermedios
 clean:
-	rm -f *.o *.mod *.exe
+	rm -f *.o *.mod $(EXEC) $(OUTPUT)
