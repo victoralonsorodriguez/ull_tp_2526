@@ -42,5 +42,6 @@ def update(frame):
 
 # Creating the animation
 ani = FuncAnimation(fig, update, init_func=init, frames=steps, interval=200, blit=False)
+#ani.save("animation.gif", writer="pillow", fps=5)
 
 plt.show()
