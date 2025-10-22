@@ -33,7 +33,6 @@ The simulation uses the leapfrog integration method to solve the N-body problem,
 
 ### Integration Method
 - **Leapfrog Integration**: Second-order symplectic integrator
-- **Adaptive Time Stepping**: Configurable time steps for accuracy vs. performance
 - **Optional Softening**: Gravitational softening parameter to avoid singularities
 
 ## Performance Comparison: Fortran vs Python
@@ -63,8 +62,6 @@ make
 # Run with a setup file
 ./ex1 < setup_disk.dat
 
-# Clean build artifacts
-make clean
 ```
 
 ## Simulation Parameters
@@ -74,13 +71,6 @@ Key parameters in setup files:
 - **dt_out**: Output interval (e.g., 0.05)
 - **t_end**: Total simulation time (e.g., 8.0)
 - **n**: Number of particles (e.g., 500)
-
-## Visualization
-
-The project includes 3D animation capabilities:
-- Particle trajectories over time
-- Configurable viewing angles and zoom
-- Export to GIF format
 
 ## Dependencies
 
