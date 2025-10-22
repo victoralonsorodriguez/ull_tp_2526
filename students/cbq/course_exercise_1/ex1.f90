@@ -10,7 +10,6 @@ program leapfrog
     real(8) :: r2, r3
     type(particle3d), dimension(:), allocatable :: particles
     type(vector3d) :: rji
-    type(vector3d), dimension(:), allocatable :: ac
     type(vector3d), dimension(:), allocatable :: accelerations
     integer :: u, uout, iarg, stat  !for the input and output files
     character(len=256) :: filename
@@ -33,7 +32,6 @@ program leapfrog
     read (u, *) n
     
     allocate(particles(n))
-    allocate(ac(n))
     allocate(accelerations(n))
 
     ! First read particle data
@@ -45,19 +43,16 @@ program leapfrog
     
     close(u)
 
-    do i = 1, n
-        accelerations(i) = vector3d(0.0, 0.0, 0.0)
-    end do
+    accelerations = vector3d(0.0, 0.0, 0.0)
+
 
     do i= 1, n
         do j= i+1, n
         rji= particles(j)%p - particles(i)%p
         r2= rji%x**2 + rji%y**2 + rji%z **2
         r3= r2*sqrt(r2)
-        ac(i)= (rji/r3) * particles(j)%m
-        ac(j)= (rji/r3) * particles(i)%m
-        accelerations(i)= accelerations(i) + ac(i)
-        accelerations(j)= accelerations(j) - ac(j)
+        accelerations(i) = accelerations(i) + (rji / r3) * particles(j)%m
+        accelerations(j) = accelerations(j) - (rji / r3) * particles(i)%m
         end do
     end do
 
@@ -88,10 +83,8 @@ program leapfrog
             rji= particles(j)%p - particles(i)%p
             r2= rji%x**2 + rji%y**2 + rji%z **2
             r3= r2*sqrt(r2)
-            ac(i)= (rji/r3) * particles(j)%m
-            ac(j)= (rji/r3) * particles(i)%m
-            accelerations(i)= accelerations(i) + ac(i)
-            accelerations(j)= accelerations(j) - ac(j)
+            accelerations(i) = accelerations(i) + (rji / r3) * particles(j)%m
+            accelerations(j) = accelerations(j) - (rji / r3) * particles(i)%m
         end do
      end do
 
@@ -112,5 +105,8 @@ program leapfrog
         end do
 
     close(uout)
+
+deallocate(particles)
+deallocate(accelerations)
 
 end program leapfrog
