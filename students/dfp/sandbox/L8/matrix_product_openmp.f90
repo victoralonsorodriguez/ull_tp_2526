@@ -25,13 +25,7 @@ program matrix_product
     B(3, 1) = 0.0; B(3, 2) = 1.0; B(3, 3) = 2.0
     
     ! Initialize result matrix C to zero
-    !$OMP PARALLEL DO COLLAPSE(2)
-    do i = 1, n
-        do j = 1, p
-            C(i, j) = 0.0
-        end do
-    end do
-    !$OMP END PARALLEL DO
+    C = 0.0
     
     ! Print number of available threads
     write(*,'(A,I0)') 'Number of OpenMP threads: ', omp_get_max_threads()
