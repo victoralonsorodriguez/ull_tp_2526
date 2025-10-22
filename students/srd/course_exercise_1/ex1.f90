@@ -71,7 +71,9 @@ program leapfrog
 
   ! Integration using Leapfrog method
   t_out = 0.0_bit64
-  do t = 0.0_bit64, t_end, dt
+  t = 0.0_bit64
+  do while (t <= t_end) ! With a do while loop there's no problem on "t" and "t_end" being real
+  ! do t = 0.0_bit64, t_end, dt ! A do loop with real numbers (and not integers) it's risky a gives a warning
 
      do i = 1, n
         p(i)%v = p(i)%v + (0.5_bit64 * dt) * a(i)
@@ -106,7 +108,7 @@ program leapfrog
         write(20,'(F12.6, 999(F12.6))') t, (p(i)%p%x, p(i)%p%y, p(i)%p%z, i=1,n)
         t_out = 0.0_bit64
      end if
-
+     t = t + dt
   end do
 
   close(20)
