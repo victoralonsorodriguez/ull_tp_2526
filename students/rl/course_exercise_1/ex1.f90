@@ -1,5 +1,3 @@
-! DISCLAIMER: THIS IS STILL IN PROGRESS AND NEEDS TO BE CLEANED UP
-
 program leapfrog
 
     use geometry
@@ -7,8 +5,8 @@ program leapfrog
     implicit none
 
     integer :: i, j, n
-    real :: dt, t_end, t, dt_out, t_out
-    real :: rs, r3
+    real(dp) :: dt, t_end, t, dt_out, t_out
+    real(dp) :: rs, r3
     type(vector3d) :: rji
     type(particle3d), allocatable :: p(:)
     type(vector3d), allocatable :: a(:)

@@ -10,7 +10,7 @@
 
 module geometry
     implicit none
-    integer, parameter :: dp = selected_int_kind(9)
+    integer, parameter :: dp = selected_real_kind(15)
 
     type :: vector3d
         real(dp) :: x, y, z
@@ -107,15 +107,10 @@ contains
     end function mulvr
 
     ! divvr: divides a 3D vector by a real number
-    type(vector3d) function divvr(v, r) ! Removed 'pure' to allow 'print' and 'stop' 
+    pure type(vector3d) function divvr(v, r) 
         type(vector3d), intent(in) :: v
         real(dp), intent(in) :: r
-        if (r == 0.0) then 
-            print *, "Error: Dividing a vector by zero is not allowed."
-            stop 1
-        else
             divvr = vector3d(v%x/r, v%y/r, v%z/r)
-        end if   
     end function divvr
 
     ! distance: returns distance between two 3D points
@@ -131,7 +126,7 @@ contains
     end function norm
 
     ! normalize: normalizes a 3D vector into a unit vector
-    type(vector3d) function normalize(v) ! Removed 'pure' because it includes reference to impure procedure 'divvr' 
+    pure type(vector3d) function normalize(v) 
         type(vector3d), intent(in)  :: v
         normalize = v/norm(v)
     end function normalize
@@ -156,4 +151,3 @@ contains
     end function cross_product
 
 end module geometry
-
