@@ -8,6 +8,7 @@ program leapfrog
 
   real(kind=bit64) :: dt, t_end, t, dt_out, t_out ! With our defined precision of 64 bits (in geometry module)
   real(kind=bit64) :: r2, r3
+  real(kind=bit64), parameter :: epsilon = 1.0e-5 ! Parameter to avoid divisions by zero
   
   type(particle3d), allocatable :: p(:) ! We re-define those using the definitions from the modules
   type(vector3d), allocatable :: a(:)
@@ -47,11 +48,11 @@ program leapfrog
   a = vector3d(0.0_bit64, 0.0_bit64, 0.0_bit64)
   do i = 1, n
      do j = i + 1, n
-        rji%x = p(j)%p%x - p(i)%p%x
+        rji%x = p(j)%p%x - p(i)%p%x ! Also possible to define a function "subpp" in geometry and use it here
         rji%y = p(j)%p%y - p(i)%p%y
         rji%z = p(j)%p%z - p(i)%p%z
 
-        r2 = rji%x**2 + rji%y**2 + rji%z**2
+        r2 = rji%x**2 + rji%y**2 + rji%z**2 + epsilon**2 ! Classical gravitational softening form
         r3 = r2 * sqrt(r2)
 
         a(i) = a(i) + (p(j)%m / r3) * rji
@@ -87,7 +88,7 @@ program leapfrog
            rji%x = p(j)%p%x - p(i)%p%x
            rji%y = p(j)%p%y - p(i)%p%y
            rji%z = p(j)%p%z - p(i)%p%z
-           r2  = mulvv(rji, rji)
+           r2  = mulvv(rji, rji) + epsilon**2
            r3  = r2 * sqrt(r2)
 
            a(i) = a(i) + (p(j)%m / r3) * rji
