@@ -16,11 +16,11 @@ module geometry
    ! We link the functions with operators
 
     interface operator(+)
-        module procedure sumvp, sumpv, sumvv
+        module procedure sumvp, sumpv, sumvv, sumpp
     end interface
 
     interface operator(-)
-        module procedure subpv,subvp, subvv
+        module procedure subpv,subvp, subvv, subpp
     end interface
 
     interface operator(*)
@@ -32,6 +32,9 @@ module geometry
     end interface 
 
  contains
+
+
+    
     pure type(point3d) function sumvp(v, p) ! The result is a point
         type(vector3d), intent(in) :: v
         type(point3d), intent(in) :: p
@@ -58,6 +61,21 @@ module geometry
         sumvv = vector3d(v1%x + v2%x, v1%y + v2%y, v1%z + v2%z)
     end function sumvv
 
+
+    pure type(vector3d) function subpp(p1, p2) 
+        type(point3d), intent(in) :: p1
+        type(point3d), intent(in) :: p2
+        subpp = vector3d(p1%x - p2%x, p1%y - p2%y, p1%z - p2%z) 
+    end function subpp ! to compute rji in main
+
+
+    pure type(vector3d) function sumpp(p1, p2) 
+        type(point3d), intent(in) :: p1
+        type(point3d), intent(in) :: p2
+        sumpp = vector3d(p1%x + p2%x, p1%y + p2%y, p1%z + p2%z) 
+    end function sumpp
+
+
     pure type(vector3d) function subvv(v1,v2)
         type(vector3d), intent(in) :: v1
         type(vector3d), intent(in) :: v2
@@ -70,6 +88,7 @@ module geometry
         subpv = subvp(v,p) ! Here we can reuse functions too
         subpv = point3d(-subpv%x, -subpv%y, -subpv%z)
     end function subpv
+
 
 
     pure type(vector3d) function mulrv(a, v)
