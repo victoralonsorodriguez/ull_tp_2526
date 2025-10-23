@@ -9,14 +9,23 @@ This project consists of the numerical integration of a system of gravitationall
 ## Project structure
 ```
 ull_tp_2526/students/rl/course_exercise_1/
+├── examples # Orbit visualizations
+│   ├── simulation_broucke.gif # Broucke-Hénon orbit
+│   └── simulation_circular.gif # Two bodies orbiting a common barycenter
+│   └── simulation_figure8.gif # Figure 8 (Chenciner-Montgomery) orbit
+├── ics # Initial conditions
+│   ├── input.dat # Figure 8 (Chenciner-Montgomery) orbit
+│   ├── input_broucke.txt # Broucke-Hénon orbit
+│   └── input_circular.txt # Two bodies orbiting a common barycenter
+│   └── input_template.txt # Template for user
 ├── Makefile 
 ├── README.md
 ├── geometry.f90 # Module with 3D geometry definitions and vector operations
 ├── particle.f90 # Module defining the particle3d type
 ├── ex1.f90 # Main leapfrog integration program
+├── ex1_old.f90 # old version of the program, without subroutines
 └── plot.py # Python script for visualizing the simulation results
 ```
-**PENDING**: UPDATE THIS ONCE I'M DONE ADDING THINGS TO THE PROJECT.
 
 ## Code explanation
 
