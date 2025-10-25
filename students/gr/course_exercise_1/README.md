@@ -8,13 +8,20 @@ It is implemented in **Fortran 90** using modular programming and produces an ou
 ## 📁 Project Structure
 
 ```
-├── geometry.f90 # Defines 3D vectors/points and custom operators
-├── particle.f90 # Defines particle type (mass, position, velocity)
-├── ex1.f90 # Main program: leapfrog time integration
+├── geometry.f90 # Module: defines 3D vectors/points and custom operators
+├── particle.f90 # Module: defines particle type (mass, position, velocity)
+├── ex1.f90 # Main program: leapfrog time integration (uses geometry and particle modules)
 ├── Makefile # Automates compilation of modules and main program
 ├── output.dat # Simulation results (generated after running ex1)
-└── plot2D.py and plot3D.py # Python scripts to visualize the results
+├── plot2D.py # 2D animation of the simulation results
+├── plot3D.py # 3D animation of the simulation results
+└── test.f90 # Auxiliary test program for geometry module
 ```
+
+* `geometry.f90` and `particle.f90` are Fortran modules used by `ex1.f90`.
+* `Makefile` compiles and links all .f90 files into an executable.
+* Running the program generates `output.dat`, which is visualized using the Python scripts `plot2D.py` and `plot3D.py`.
+* `test.f90` is an independent verification file used to test the geometry module (not required for compilation).
 
 ---
 
