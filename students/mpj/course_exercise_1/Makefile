@@ -2,7 +2,7 @@
 FC = gfortran
 
 # Opciones de compilación
-FFLAGS = -Wall -O2
+FFLAGS = -Wall -Wextra -O2
 
 # Archivos
 MODULES = geometry particle
