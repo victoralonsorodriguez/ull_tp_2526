@@ -17,10 +17,21 @@ steps = int(len(df) / 3)
 # Initialising the figure
 fig, ax = plt.subplots(1, 1, figsize=(8, 8))
 line, = ax.plot([], [], 'o')
-ax.set_xlim(df["x"].min(), df["x"].max())
-ax.set_ylim(df["y"].min(), df["y"].max())
+
+x_min, x_max = df["x"].min(), df["x"].max()
+y_min, y_max = df["y"].min(), df["y"].max()
+
+# 10% margin of the larger axis range to keep all particles visible
+margin = 0.1 * max(x_max - x_min, y_max - y_min)
+
+ax.set_xlim(x_min - margin, x_max + margin)
+ax.set_ylim(y_min - margin, y_max + margin)
+ax.set_aspect('equal', 'box')
+
 ax.set_xlabel("x")
 ax.set_ylabel("y")
+
+title = ax.set_title('')
 
 
 # Initialisation function
@@ -36,12 +47,13 @@ def update(frame):
     x, y = reduced_df["x"].tolist(), reduced_df["y"].tolist()
 
     line.set_data(x, y)
+    title.set_text(f"t = {frame}")
 
-    return line
+    return line, title
 
 
 # Creating the animation
-ani = FuncAnimation(fig, update, init_func=init, frames=steps, interval=200, blit=False)
+ani = FuncAnimation(fig, update, init_func=init, frames=steps, interval=50, blit=False)
 #ani.save("animation.gif", writer="pillow", fps=5)
 
 plt.show()
