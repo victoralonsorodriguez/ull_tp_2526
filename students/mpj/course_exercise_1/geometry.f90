@@ -5,17 +5,19 @@
 module geometry
     implicit none
 
+    integer, parameter :: dp = SELECTED_REAL_KIND(p=15, r=307) ! Defining our desired precision (64 bits)
+
     ! we create vector3d, that is a type of data personalised
     type :: vector3d
-        real(8) :: x = 0.0_8   ! 0 is the value for defect
-        real(8) :: y = 0.0_8
-        real(8) :: z = 0.0_8
+        real(dp) :: x = 0.0_dp   ! 0 is the value for defect
+        real(dp) :: y = 0.0_dp
+        real(dp) :: z = 0.0_dp
     end type vector3d
 
     type :: point3d
-        real(8) :: x = 0.0_8
-        real(8) :: y = 0.0_8
-        real(8) :: z = 0.0_8
+        real(dp) :: x = 0.0_dp
+        real(dp) :: y = 0.0_dp
+        real(dp) :: z = 0.0_dp
     end type point3d
 
     ! Operators matching functions defined below 
@@ -127,7 +129,7 @@ contains
     ! real * vector
     function mulrv(num, vector) result(res)
         implicit none
-        real(8), intent(in) :: num
+        real(dp), intent(in) :: num
         type(vector3d),  intent(in) :: vector
 
         type(vector3d) :: res
@@ -139,7 +141,7 @@ contains
     ! vector * real
     function mulvr(vector, num) result(res)
         implicit none
-        real(8), intent(in) :: num
+        real(dp), intent(in) :: num
         type(vector3d),  intent(in) :: vector
 
         type(vector3d) :: res
@@ -151,7 +153,7 @@ contains
     ! vector / real
     function divvr(vector, num) result(res)
         implicit none
-        real(8), intent(in) :: num
+        real(dp), intent(in) :: num
         type(vector3d),  intent(in) :: vector
 
         type(vector3d) :: res
@@ -166,7 +168,7 @@ contains
         type(point3d), intent(in) :: point1
         type(point3d), intent(in) :: point2
         
-        real(8) :: res
+        real(dp) :: res
         res = sqrt( (point2%x - point1%x)**2 + &
                     (point2%y - point1%y)**2 + &
                     (point2%z - point1%z)**2 )
@@ -177,8 +179,8 @@ contains
     ! Angle between two vectors
     function angle(vector1, vector2) result(res)
         type(vector3d), intent(in) :: vector1, vector2
-        real(8) :: res
-        real(8) :: scalar_prod, mod1, mod2, cos_angle
+        real(dp) :: res
+        real(dp) :: scalar_prod, mod1, mod2, cos_angle
 
         scalar_prod = vector1%x * vector2%x + &
                       vector1%y * vector2%y + &
@@ -187,8 +189,8 @@ contains
         mod1 = sqrt(vector1%x**2 + vector1%y**2 + vector1%z**2)
         mod2 = sqrt(vector2%x**2 + vector2%y**2 + vector2%z**2)
 
-        if (mod1 == 0.0_8 .or. mod2 == 0.0_8) then
-            res = 0.0_8
+        if (mod1 == 0.0_dp .or. mod2 == 0.0_dp) then
+            res = 0.0_dp
         else
             cos_angle = scalar_prod / (mod1 * mod2)
             res = acos(cos_angle)
@@ -200,7 +202,7 @@ contains
     function normalize(vector) result(res)
         type(vector3d), intent(in) :: vector
         type(vector3d) :: res
-        real(8) :: mod
+        real(dp) :: mod
 
         mod = sqrt(vector%x**2 + vector%y**2 + vector%z**2)
         res = vector / mod
