@@ -6,7 +6,8 @@ import pandas as pd
 path = "C:/Users/uSer/Documents/Máster Astrofísica/Segundo curso/Programación/fortran_course/students/mpj/course_exercise_1/output.dat"
 df = pd.read_csv(path, sep=r"\s+", header=None)  # separador por espacios
 df.columns = ["x", "y", "z"]
-#print(df)
+
+n_part = 3
 steps = int(len(df) / 3)
 
 
@@ -14,9 +15,17 @@ steps = int(len(df) / 3)
 # PARTICLES MOVEMENT ANIMATION
 # =========================================================
 
+# Colors for each particle
+colors = ['magenta', 'gold', 'silver']
+
+# Initialising lists to store the positions of the particles
+x_data = [[] for _ in range(n_part)]
+y_data = [[] for _ in range(n_part)]
+
 # Initialising the figure
-fig, ax = plt.subplots(1, 1, figsize=(8, 8))
-line, = ax.plot([], [], 'o')
+fig, ax = plt.subplots(1, 1)
+lines_trace = [ax.plot([], [], '-', color=colors[i])[0] for i in range(n_part)]
+markers = [ax.plot([], [], 'o', color=colors[i])[0] for i in range(n_part)]
 
 x_min, x_max = df["x"].min(), df["x"].max()
 y_min, y_max = df["y"].min(), df["y"].max()
@@ -36,20 +45,25 @@ title = ax.set_title('')
 
 # Initialisation function
 def init():
-    line.set_data([], [])
-    return line
+    for line, marker in zip(lines_trace, markers):
+        line.set_data([], [])
+        marker.set_data([], [])
+    return lines_trace + markers
 
 
-# Función que se llama en cada frame de la animación
+# function that creates each frame of the animation
 def update(frame):
-    lines_part = range(3*frame, 3*frame + 3)
-    reduced_df = df.iloc[lines_part]
-    x, y = reduced_df["x"].tolist(), reduced_df["y"].tolist()
+    for i in range(n_part):
+        idx = frame*n_part + i
+        x, y = df.loc[idx, ["x", "y"]]
+        x_data[i].append(x)
+        y_data[i].append(y)
+        markers[i].set_data([x], [y])
+        lines_trace[i].set_data(x_data[i], y_data[i])
 
-    line.set_data(x, y)
     title.set_text(f"t = {frame}")
 
-    return line, title
+    return lines_trace, markers, title
 
 
 # Creating the animation
