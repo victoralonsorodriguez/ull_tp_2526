@@ -7,12 +7,14 @@ It is implemented in **Fortran 90** using modular programming and produces an ou
 
 ## 📁 Project Structure
 
+```
 ├── geometry.f90 # Defines 3D vectors/points and custom operators
 ├── particle.f90 # Defines particle type (mass, position, velocity)
 ├── ex1.f90 # Main program: leapfrog time integration
 ├── Makefile # Automates compilation of modules and main program
 ├── output.dat # Simulation results (generated after running ex1)
 └── plot2D.py and plot3D.py # Python scripts to visualize the results
+```
 
 ---
 
