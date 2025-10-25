@@ -8,6 +8,9 @@ program leapfrog
   real(dp) :: r2, r3
   type(vector3d) :: rji
 
+  ! Softing parameter to avoid division by zero
+  real(dp), parameter :: eps = 1.0e-5
+
   ! Dynamic arrays to store particles and their accelerations; size will be allocated at runtime
   type(particle3d), allocatable :: particles(:)
   type(vector3d), allocatable :: a(:)
@@ -32,7 +35,7 @@ program leapfrog
   do i = 1, n
      do j = i+1, n
         rji = particles(j)%p - particles(i)%p
-        r2 = rji%x**2 + rji%y**2 + rji%z**2
+        r2 = rji%x**2 + rji%y**2 + rji%z**2 + eps**2
         r3 = r2 * sqrt(r2)
         a(i) = a(i) + particles(j)%m * rji / r3    ! Newton force
         a(j) = a(j) - particles(i)%m * rji / r3
@@ -51,7 +54,7 @@ program leapfrog
      do i = 1,n
         do j = i+1,n
            rji = particles(j)%p - particles(i)%p
-           r2 = rji%x**2 + rji%y**2 + rji%z**2
+           r2 = rji%x**2 + rji%y**2 + rji%z**2 + eps**2
            r3 = r2 * sqrt(r2)
            a(i) = a(i) + particles(i)%m * rji / r3
            a(j) = a(j) - particles(j)%m * rji / r3
@@ -71,5 +74,9 @@ program leapfrog
         t_out = 0.0_dp
      end if
   end do
+
+  ! Clean up
+  deallocate(particles)
+  deallocate(a)
   
 end program leapfrog
