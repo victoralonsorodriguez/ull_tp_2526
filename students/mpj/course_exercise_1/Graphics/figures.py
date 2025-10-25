@@ -3,8 +3,8 @@ import matplotlib.pylab as plt
 import pandas as pd
 
 # Reading the output file
-path = "C:/Users/uSer/Documents/Máster Astrofísica/Segundo curso/Programación/fortran_course/students/mpj/course_exercise_1/output.dat"
-df = pd.read_csv(path, sep=r"\s+", header=None)  # separador por espacios
+path = "C:/Users/uSer/Documents/Máster Astrofísica/Segundo curso/Programación/fortran_course/students/mpj/course_exercise_1/"
+df = pd.read_csv(path + 'output.dat', sep=r"\s+", header=None)  # separador por espacios
 df.columns = ["x", "y", "z"]
 
 n_part = 3
@@ -67,7 +67,7 @@ def update(frame):
 
 
 # Creating the animation
-ani = FuncAnimation(fig, update, init_func=init, frames=steps, interval=50, blit=False)
-#ani.save("animation.gif", writer="pillow", fps=5)
+ani = FuncAnimation(fig, update, init_func=init, frames=steps, interval=60, blit=False)
+#ani.save(path+"Graphics/animation.gif", writer="pillow", fps=10)
 
 plt.show()
