@@ -4,8 +4,8 @@ program leapfrog
   implicit none
 
   integer :: i, j, n
-  real(8) :: dt, t_end, t, dt_out, t_out
-  real(8) :: r2, r3
+  real(dp) :: dt, t_end, t, dt_out, t_out
+  real(dp) :: r2, r3
   type(vector3d) :: rji
 
   ! Dynamic arrays to store particles and their accelerations; size will be allocated at runtime
@@ -25,7 +25,7 @@ program leapfrog
   do i = 1, n
      read *, particles(i)%m, particles(i)%p%x, particles(i)%p%y, particles(i)%p%z, &
              particles(i)%v%x, particles(i)%v%y, particles(i)%v%z
-     a(i) = vector3d(0.0_8,0.0_8,0.0_8)
+     a(i) = vector3d(0.0_dp,0.0_dp,0.0_dp)
   end do
 
   ! Calculate the initial acceleration
@@ -40,12 +40,12 @@ program leapfrog
   end do
 
   ! Leapfrog integration
-  t_out = 0.0_8
-  do t = 0.0_8, t_end, dt
+  t_out = 0.0_dp
+  do t = 0.0_dp, t_end, dt
      do i = 1, n
-       particles(i)%v = particles(i)%v + a(i) * (dt / 2.0_8)
+       particles(i)%v = particles(i)%v + a(i) * (dt / 2.0_dp)
        particles(i)%p = particles(i)%p + particles(i)%v * dt
-       a(i) = vector3d(0.0_8, 0.0_8, 0.0_8)
+       a(i) = vector3d(0.0_dp, 0.0_dp, 0.0_dp)
      end do
 
      do i = 1,n
@@ -59,7 +59,7 @@ program leapfrog
      end do
      
      do i = 1, n
-       particles(i)%v = particles(i)%v + a(i) * (dt / 2.0_8)
+       particles(i)%v = particles(i)%v + a(i) * (dt / 2.0_dp)
      end do
      
      ! Output
@@ -68,7 +68,7 @@ program leapfrog
         do i = 1,n
            print*, particles(i)%p%x, particles(i)%p%y, particles(i)%p%z
         end do
-        t_out = 0.0_8
+        t_out = 0.0_dp
      end if
   end do
   
