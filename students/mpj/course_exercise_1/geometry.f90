@@ -90,7 +90,7 @@ contains
         res%z = vector%z - point%z
     end function subvp
 
-    ! point - vector
+    ! point - vector = point
     function subpv(point, vector) result(res)
         implicit none
         type(point3d),  intent(in) :: point
@@ -126,7 +126,7 @@ contains
         res%z = point1%z - point2%z
     end function subpp
 
-    ! real * vector
+    ! real * vector = vector
     function mulrv(num, vector) result(res)
         implicit none
         real(dp), intent(in) :: num
@@ -138,7 +138,7 @@ contains
         res%z = num * vector%z
     end function mulrv
 
-    ! vector * real
+    ! vector * real = vector
     function mulvr(vector, num) result(res)
         implicit none
         real(dp), intent(in) :: num
@@ -150,7 +150,7 @@ contains
         res%z = vector%z * num
     end function mulvr
 
-    ! vector / real
+    ! vector / real = vector
     function divvr(vector, num) result(res)
         implicit none
         real(dp), intent(in) :: num
@@ -161,6 +161,19 @@ contains
         res%y = vector%y / num
         res%z = vector%z / num
     end function divvr
+
+    ! scalar product for two vectors
+    ! vector * vector = scalar
+    function scalar_prod(vector1, vector2) result(res)
+        implicit none
+        type(vector3d), intent(in) :: vector1
+        type(vector3d), intent(in) :: vector2
+        
+        real(dp) :: res
+        res = vector1%x * vector2%x + &
+              vector1%y * vector2%y + &
+              vector1%z * vector2%z
+    end function scalar_prod
 
     ! Calculates the distance between two points
     function distance(point1, point2) result(res)
@@ -180,11 +193,9 @@ contains
     function angle(vector1, vector2) result(res)
         type(vector3d), intent(in) :: vector1, vector2
         real(dp) :: res
-        real(dp) :: scalar_prod, mod1, mod2, cos_angle
+        real(dp) :: prod, mod1, mod2, cos_angle
 
-        scalar_prod = vector1%x * vector2%x + &
-                      vector1%y * vector2%y + &
-                      vector1%z * vector2%z
+        prod = scalar_prod(vector1, vector2)
 
         mod1 = sqrt(vector1%x**2 + vector1%y**2 + vector1%z**2)
         mod2 = sqrt(vector2%x**2 + vector2%y**2 + vector2%z**2)
@@ -192,7 +203,7 @@ contains
         if (mod1 == 0.0_dp .or. mod2 == 0.0_dp) then
             res = 0.0_dp
         else
-            cos_angle = scalar_prod / (mod1 * mod2)
+            cos_angle = prod / (mod1 * mod2)
             res = acos(cos_angle)
         end if
 
