@@ -35,8 +35,8 @@ $(EXEC): $(OBJECTS)
 # Exectuing the program with data
 run: $(EXEC) $(INPUT)
 	@echo ">>> Ejecutando $(EXEC) con $(INPUT)..."
-	$(EXEC) < $(INPUT) > $(OUTPUT)
-	@echo ">>> Resultado guardado en $(OUTPUT)"
+	$(EXEC) $(INPUT)
+	@echo ">>> Result saved in $(OUTPUT)"
 
 # Cleaning intermediate files
 clean:
