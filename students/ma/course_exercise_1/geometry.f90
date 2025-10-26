@@ -16,7 +16,7 @@ module geometry
    ! We link the functions with operators
 
     interface operator(+)
-        module procedure sumvp, sumpv, sumvv, sumpp
+        module procedure sumvp, sumpv, sumvv
     end interface
 
     interface operator(-)
@@ -67,13 +67,6 @@ module geometry
         type(point3d), intent(in) :: p2
         subpp = vector3d(p1%x - p2%x, p1%y - p2%y, p1%z - p2%z) 
     end function subpp ! to compute rji in main
-
-
-    pure type(vector3d) function sumpp(p1, p2) 
-        type(point3d), intent(in) :: p1
-        type(point3d), intent(in) :: p2
-        sumpp = vector3d(p1%x + p2%x, p1%y + p2%y, p1%z + p2%z) 
-    end function sumpp
 
 
     pure type(vector3d) function subvv(v1,v2)
