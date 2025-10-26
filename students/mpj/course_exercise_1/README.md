@@ -5,7 +5,7 @@ The code is written in **Fortran 90** and simulates the motion of particles unde
 
 ---
 
-## Project Structure
+# Project Structure
 
 course_exercise_1/
 │
@@ -26,7 +26,7 @@ course_exercise_1/
 
 ---
 
-## Compilation
+# Compilation
 
 Make sure you have a Fortran compiler installed (e.g., `gfortran`).
 
@@ -36,13 +36,13 @@ To compile the program:
 make
 ```
 
-# To clean up the generated object (.o) and module (.mod) files, run:
+To clean up the generated object (.o) and module (.mod) files, run:
 ```bash
 make clean
 ```
 
 
-# The input.dat file must contain:
+The input.dat file must contain:
 
 dt          # Integration time step
 dt_out      # Time interval between data outputs
@@ -51,16 +51,16 @@ n           # Number of particles
 m x y z vx vy vz   # For each particle: mass, initial position, and velocity
 
 
-# The output file contains the simulation time followed by the 3D positions (x, y, z) of all particles at that time.
+The output file contains the simulation time followed by the 3D positions (x, y, z) of all particles at that time.
 
-# You can visualize the simulation using the Python script provided in Graphics/figures.py.
+You can visualize the simulation using the Python script provided in Graphics/figures.py.
 ```bash
 python Graphics/figures.py
 ```
 
-# This script reads output.dat and generates trajectory plots or animations (animation.gif) inside the Graphics/ folder.
+This script reads output.dat and generates trajectory plots or animations (animation.gif) inside the Graphics/ folder.
 
-# To reproduce the same environment, use the requirements.txt file:
+To reproduce the same environment, use the requirements.txt file:
 ```bash
 conda create -n neutron python=3.13.9
 conda activate neutron
@@ -69,7 +69,7 @@ pip install -r Graphics/requirements.txt
 
 ---
 
-## Technical Description
+# Technical Description
 
 The code uses the Leapfrog integration method, a numerical scheme commonly used for N-body dynamics simulations.
 A small softening parameter eps is included to avoid division by zero during force computation.
