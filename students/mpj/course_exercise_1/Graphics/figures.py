@@ -65,7 +65,7 @@ def update(frame):
         markers[i].set_data([x], [y])
         lines_trace[i].set_data(x_data[i], y_data[i])
 
-    title.set_text(f"t = {time:.2f}")
+    title.set_text(f"time = {time:.2f}")
 
     return lines_trace, markers, title
 
