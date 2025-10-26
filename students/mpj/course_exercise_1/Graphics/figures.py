@@ -4,8 +4,8 @@ import pandas as pd
 
 # Reading the output file
 path = "C:/Users/uSer/Documents/Máster Astrofísica/Segundo curso/Programación/fortran_course/students/mpj/course_exercise_1/"
-df = pd.read_csv(path + 'output.dat', sep=r"\s+", header=None)  # separador por espacios
-df.columns = ["x", "y", "z"]
+df = pd.read_csv(path + 'output.dat', sep=r"\s+", header=None)
+df.columns = ["time", "x1", "y1", "z1", "x2", "y2", "z2", "x3", "y3", "z3"]
 
 n_part = 3
 steps = int(len(df) / 3)
@@ -27,8 +27,8 @@ fig, ax = plt.subplots(1, 1)
 lines_trace = [ax.plot([], [], '-', color=colors[i])[0] for i in range(n_part)]
 markers = [ax.plot([], [], 'o', color=colors[i])[0] for i in range(n_part)]
 
-x_min, x_max = df["x"].min(), df["x"].max()
-y_min, y_max = df["y"].min(), df["y"].max()
+x_min, x_max = df[["x1", "x2", "x3"]].min().min(), df[["x1", "x2", "x3"]].max().max()
+y_min, y_max = df[["y1", "y2", "y3"]].min().min(), df[["y1", "y2", "y3"]].max().max()
 
 # 10% margin of the larger axis range to keep all particles visible
 margin = 0.1 * max(x_max - x_min, y_max - y_min)
@@ -53,15 +53,19 @@ def init():
 
 # function that creates each frame of the animation
 def update(frame):
-    for i in range(n_part):
-        idx = frame*n_part + i
-        x, y = df.loc[idx, ["x", "y"]]
+    time = df["time"][frame]
+    for i in range(0, n_part):
+        labelx = "x" + str(i+1)
+        labely = "y" + str(i+1)
+        labelz = "z" + str(i+1)
+
+        x, y, z = df.loc[frame, [labelx, labely, labelz]]
         x_data[i].append(x)
         y_data[i].append(y)
         markers[i].set_data([x], [y])
         lines_trace[i].set_data(x_data[i], y_data[i])
 
-    title.set_text(f"t = {frame}")
+    title.set_text(f"t = {time:.2f}")
 
     return lines_trace, markers, title
 
