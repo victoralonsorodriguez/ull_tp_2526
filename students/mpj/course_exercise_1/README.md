@@ -44,9 +44,9 @@ make clean
 
 The input.dat file must contain:
 
-dt          # Integration time step
-dt_out      # Time interval between data outputs
-t_end       # Total simulation time
+</dt>        # Integration time step
+</dt_out>      # Time interval between data outputs
+</t_end>       # Total simulation time
 n           # Number of particles
 m x y z vx vy vz   # For each particle: mass, initial position, and velocity
 
