@@ -6,21 +6,17 @@ The code is written in **Fortran 90** and simulates the motion of particles unde
 ---
 
 # Project Structure
+- `ex1.f90`: main program (leapfrog integrator)
+- `geometry.f90`: module defining `vector3d` and `point3d` types, and charging mathematical operations between points and vectors.  
+- `particle.f90`: module defining the `particle3d` type, specified by a mass and the position and velocity components.
 
-course_exercise_1/
-├── **Graphics/**
-│ ├── `animation.gif`          # Animación generada a partir del output
-│ ├── `requirements.txt`       # Dependencias de Python para la visualización
-│ └── `figures.py`             # Script de Python para trazar trayectorias
-│
-├── **ex1.f90**                  # Programa principal (Integrador Leapfrog)
-├── **geometry.f90**             # Definición del tipo vector3d y operaciones
-├── **particle.f90**             # Definición del tipo particle3d (masa, pos, vel)
-│
-├── `input.dat`                # Archivo de entrada con parámetros y datos iniciales
-├── `output.dat`               # Archivo de salida con las posiciones de las partículas
-├── `Makefile`                 # Script de construcción y compilación
-└── `README.md`                # Documentación del proyecto
+- `input.dat`: input file with initial conditions and parameters.
+- `output.dat`: output file with the particles positions at every time step.
+- `Makefile`: compile the project, generating an output file.
+
+- `figures.py`: *Python* script that generates an animation for the particles from the `output.dat` file.
+- `animation.gif`: animation generated from the simulation output
+- `requirements.txt`: *Python* enviroment, with all the packages
 
 
 ---
@@ -68,25 +64,3 @@ conda activate neutron
 pip install -r Graphics/requirements.txt
 ```
 
----
-
-# Technical Description
-
-The code uses the Leapfrog integration method, a numerical scheme commonly used for N-body dynamics simulations.
-A small softening parameter eps is included to avoid division by zero during force computation.
-
-Main modules:
-
-geometry.f90: Defines the vector3d type and overloaded point and vector operations.
-
-particle.f90: Defines the particle3d type, containing mass (m), position (p), and velocity (v).
-
-ex1.f90: Main program that:
-
-    1. Reads initial parameters and particle data.
-
-    2. Computes initial accelerations.
-
-    3. Integrates motion using Leapfrog.
-
-    4. Periodically writes positions to output.dat.
