@@ -8,20 +8,19 @@ The code is written in **Fortran 90** and simulates the motion of particles unde
 # Project Structure
 
 course_exercise_1/
+├── **Graphics/**
+│ ├── `animation.gif`          # Animación generada a partir del output
+│ ├── `requirements.txt`       # Dependencias de Python para la visualización
+│ └── `figures.py`             # Script de Python para trazar trayectorias
 │
-├── Graphics/
-│ ├── animation.gif          # Animation generated from the simulation output
-│ └── requirements.txt       # Python dependencies for visualization
-│ └── figures.py             # Python script to visualize trajectories
+├── **ex1.f90**                  # Programa principal (Integrador Leapfrog)
+├── **geometry.f90**             # Definición del tipo vector3d y operaciones
+├── **particle.f90**             # Definición del tipo particle3d (masa, pos, vel)
 │
-├── ex1.f90                  # Main program (leapfrog integrator)
-├── geometry.f90             # Defines vector3d and point3d type and vector/point operations
-├── particle.f90             # Defines particle3d type (mass, position, velocity)
-│
-├── input.dat                # Input file with simulation parameters
-├── output.dat               # Output file with particle positions
-├── Makefile                 # Build script
-└── README.md                # Project documentation
+├── `input.dat`                # Archivo de entrada con parámetros y datos iniciales
+├── `output.dat`               # Archivo de salida con las posiciones de las partículas
+├── `Makefile`                 # Script de construcción y compilación
+└── `README.md`                # Documentación del proyecto
 
 
 ---
