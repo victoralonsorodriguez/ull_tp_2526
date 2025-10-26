@@ -15,10 +15,40 @@ program leapfrog
   type(particle3d), allocatable :: particles(:)
   type(vector3d), allocatable :: a(:)
 
-  read *, dt        ! integration step
-  read *, dt_out    ! time between two positions prints
-  read *, t_end     ! total time of the simulation
-  read *, n         ! number of particles
+  ! Input parameters
+  integer :: arg_count
+  character(len=200) :: input_file
+  integer :: ios, unit
+
+  ! Output parameters
+  character(len=200) :: output_file
+  integer :: out_unit
+
+  ! Opening the input file
+  unit = 10
+  input_file = "input.dat"
+  open(unit, file=trim(input_file), status='old', action='read', iostat=ios)
+  
+  if (ios /= 0) then
+   print *, "Error: can't open file ", trim(input_file)
+   stop
+  end if
+
+  ! Opening the output file
+  out_unit = 20
+  output_file = "output.dat"
+  open(out_unit, file=trim(output_file), status='replace', action='write', iostat=ios)
+
+  if (ios /= 0) then
+   print *, "Error: can't open file ", trim(output_file)
+   stop
+  end if
+
+  ! Reading the input from the input file
+  read (unit, *) dt        ! integration step
+  read (unit, *) dt_out    ! time between two positions prints
+  read (unit, *) t_end     ! total time of the simulation
+  read (unit, *) n         ! number of particles
 
   ! Giving size to the arrays
   allocate(particles(n))
@@ -26,10 +56,12 @@ program leapfrog
 
   ! Reading masses, positions and velocities
   do i = 1, n
-     read *, particles(i)%m, particles(i)%p%x, particles(i)%p%y, particles(i)%p%z, &
+     read (unit, *) particles(i)%m, particles(i)%p%x, particles(i)%p%y, particles(i)%p%z, &
              particles(i)%v%x, particles(i)%v%y, particles(i)%v%z
      a(i) = vector3d(0.0_dp,0.0_dp,0.0_dp)
   end do
+
+  close(unit)
 
   ! Calculate the initial acceleration
   do i = 1, n
@@ -68,12 +100,16 @@ program leapfrog
      ! Output
      t_out = t_out + dt
      if (t_out >= dt_out) then
-        do i = 1,n
-           print*, particles(i)%p%x, particles(i)%p%y, particles(i)%p%z
-        end do
+      write(out_unit, '(F10.5,1X)', advance='no') t  ! We update the time
+      do i = 1,n
+        write(out_unit, '(3F16.10,1X)', advance='no') particles(i)%p%x, particles(i)%p%y, particles(i)%p%z
+      end do
+      write(out_unit,*)  ! line break
         t_out = 0.0_dp
      end if
   end do
+
+  close(out_unit)
 
   ! Clean up
   deallocate(particles)
