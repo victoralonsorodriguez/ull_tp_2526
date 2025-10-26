@@ -149,6 +149,6 @@ As an example, the 2D and 3D animations obtained with the provided input file ar
 
 ## 👨‍💻 Author
 
-Raquel Garcia Paris
-Programming Techniques - Exercise 1
+Raquel Garcia Paris  
+Programming Techniques - Exercise 1  
 Universidad de La Laguna - 2025
