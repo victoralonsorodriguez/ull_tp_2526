@@ -37,8 +37,8 @@ program leapfrog
         rji = particles(j)%p - particles(i)%p
         r2 = rji%x**2 + rji%y**2 + rji%z**2 + eps**2
         r3 = r2 * sqrt(r2)
-        a(i) = a(i) + particles(i)%m * rji / r3    ! Newton force
-        a(j) = a(j) - particles(j)%m * rji / r3
+        a(i) = a(i) + particles(j)%m * rji / r3    ! Newton force
+        a(j) = a(j) - particles(i)%m * rji / r3
      end do
   end do
 
