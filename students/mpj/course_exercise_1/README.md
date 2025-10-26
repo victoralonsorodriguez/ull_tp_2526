@@ -42,13 +42,15 @@ make clean
 ```
 
 
-The input.dat file must contain:
+The `input.dat` file must contain:
 
-<dt>        : Integration time step
-<dt_out>    : Time interval between data outputs
-<t_end>     : Total simulation time
-<n>         : Number of particles
-m x y z vx vy vz   : For each particle: mass, initial position, and velocity
+| Variable | Description |
+| :--- | :--- |
+| `<dt>` | Paso de tiempo de integración ($\Delta t$). |
+| `<dt_out>` | Intervalo de tiempo entre las salidas de datos. |
+| `<t_end>` | Tiempo total de la simulación. |
+| `<n>` | Número de partículas. |
+| `m x y z vx vy vz` | Fila por cada partícula: masa, posición inicial (x,y,z) y velocidad inicial (vx,vy,vz). |
 
 
 The output file contains the simulation time followed by the 3D positions (x, y, z) of all particles at that time.
