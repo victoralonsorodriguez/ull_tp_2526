@@ -6,7 +6,10 @@ module geometry
 
     ! Needed types are public # Lecture 4
     public :: dp, vector3d, point3d
+    public :: operator(+), operator(-), operator(*), operator(/)
+    public :: angle, normalize, cross_product, distance
 
+    
         !--- Parameters and types ---!
 
         ! Defining the precision of the values to 64 bits # Lecture 3
@@ -28,12 +31,17 @@ module geometry
 
         ! Adding operator
         interface operator(+)
-            module procedure sumvp, sumpv
+            module procedure sumvp, sumpv, sumvv
         end interface
 
         ! Substracting operator
         interface operator(-)
-            module procedure subvp, subpv
+            module procedure subvp, subpv, subvv
+        end interface
+
+        ! Product operator
+        interface operator(*)
+            module procedure mulrv, mulvr
         end interface
 
         ! Dividing operator
@@ -71,6 +79,16 @@ module geometry
 
         end function sumpv
 
+        ! Function to add two vectors
+        function sumvv(v1, v2) result(res)
+
+            type(vector3d), intent(in) :: v1, v2
+            type(vector3d) :: res
+
+            res = vector3d(v1%x + v2%x, v1%y + v2%y, v1%z + v2%z)
+
+        end function sumvv
+
 
         ! Function subvp for substracting vectors and points
         function subvp(v,p) result(res)
@@ -95,6 +113,15 @@ module geometry
 
         end function subpv
 
+        ! Function to subtract two vectors
+        function subvv(v1, v2) result(res)
+
+            type(vector3d), intent(in) :: v1, v2
+            type(vector3d) :: res
+
+            res = vector3d(v1%x - v2%x, v1%y - v2%y, v1%z - v2%z)
+            
+        end function subvv
 
         ! Function mulrv for multiplying reals and vectors
         function mulrv(r,v) result(res)
