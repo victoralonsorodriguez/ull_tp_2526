@@ -34,9 +34,12 @@ To compile the program:
 
 ```bash
 make
+```
 
 # To clean up the generated object (.o) and module (.mod) files, run:
+```bash
 make clean
+```
 
 
 # The input.dat file must contain:
@@ -51,17 +54,18 @@ m x y z vx vy vz   # For each particle: mass, initial position, and velocity
 # The output file contains the simulation time followed by the 3D positions (x, y, z) of all particles at that time.
 
 # You can visualize the simulation using the Python script provided in Graphics/figures.py.
-
+```bash
 python Graphics/figures.py
+```
 
 # This script reads output.dat and generates trajectory plots or animations (animation.gif) inside the Graphics/ folder.
 
 # To reproduce the same environment, use the requirements.txt file:
-
+```bash
 conda create -n neutron python=3.13.9
 conda activate neutron
 pip install -r Graphics/requirements.txt
-
+```
 
 ---
 
