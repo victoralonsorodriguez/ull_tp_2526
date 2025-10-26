@@ -1,11 +1,12 @@
 module geometry
+    use iso_fortran_env, only: real64
     implicit none
     type :: vector3d
-        real (kind = 8) :: x , y, z  ! 64-bit real
+        real (real64) :: x , y, z  ! 64-bit real
     end type vector3d
 
     type :: point3d
-    real(kind = 8) :: x, y, z  ! 64-bit real
+    real(real64) :: x, y, z  ! 64-bit real
   end type point3d
 
     interface operator (+)
@@ -74,7 +75,7 @@ module geometry
 
     ! Real * vector = vector
     pure type(vector3d) function mulrv(r, v)
-        real(kind=8), intent(in) :: r
+        real(real64), intent(in) :: r
         type(vector3d), intent(in) :: v
         mulrv = vector3d(r * v%x, r * v%y, r * v%z)
     end function mulrv
@@ -82,22 +83,22 @@ module geometry
     ! Vector * real = vector
     pure type(vector3d) function mulvr(v, r)
         type(vector3d), intent(in) :: v
-        real(kind=8), intent(in) :: r
+        real(real64), intent(in) :: r
         mulvr = vector3d(v%x * r, v%y * r, v%z * r)
     end function mulvr
 
     ! Vector / real = Vector
     pure type(vector3d) function divvr(v, r)
         type(vector3d), intent(in) :: v
-        real(kind=8), intent(in) :: r
+        real(real64), intent(in) :: r
         divvr = vector3d(v%x / r, v%y / r, v%z / r)
     end function divvr
 
 
     ! Distance between two points
-    pure real(kind=8) function distance(p1, p2)
+    pure real(real64) function distance(p1, p2)
         type(point3d), intent(in) :: p1, p2
-        real(kind=8) :: dx, dy, dz
+        real(real64) :: dx, dy, dz
         dx = p1%x - p2%x
         dy = p1%y - p2%y
         dz = p1%z - p2%z
@@ -105,9 +106,9 @@ module geometry
     end function distance
 
     ! Angle between two vectors (radians)
-    pure real(kind=8) function angle(a, b)
+    pure real(real64) function angle(a, b)
         type(vector3d), intent(in) :: a, b
-        real(kind=8) :: dot_product, mag_a, mag_b, cos_angle
+        real(real64) :: dot_product, mag_a, mag_b, cos_angle
         
         dot_product = a%x * b%x + a%y * b%y + a%z * b%z
         mag_a = sqrt(a%x*a%x + a%y*a%y + a%z*a%z)
@@ -119,11 +120,11 @@ module geometry
     ! Normalize a vector (unit vector)
     pure type(vector3d) function normalize(a)
         type(vector3d), intent(in) :: a
-        real(kind=8) :: mag
+        real(real64) :: mag
         
         mag = sqrt(a%x*a%x + a%y*a%y + a%z*a%z)
-        if (mag == 0.0_8) then
-            normalize = vector3d(0.0_8, 0.0_8, 0.0_8)
+        if (mag == 0.0_real64) then
+            normalize = vector3d(0.0_real64, 0.0_real64, 0.0_real64)
         else
             normalize = vector3d(a%x/mag, a%y/mag, a%z/mag)
         end if

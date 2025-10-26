@@ -1,4 +1,5 @@
 program leapfrog
+    use iso_fortran_env, only: real64
     use geometry
     use particle
 
@@ -6,8 +7,8 @@ program leapfrog
 
   ! We define the integers and vectors
     integer :: i, j, n, k, n_steps
-    real(8) :: dt, t_end, t, dt_out, t_out
-    real(8) :: r2, r3
+    real(real64) :: dt, t_end, t, dt_out, t_out
+    real(real64) :: r2, r3
     type(particle3d), dimension(:), allocatable :: particles
     type(vector3d) :: rji
     type(vector3d), dimension(:), allocatable :: accelerations
@@ -34,7 +35,7 @@ program leapfrog
     allocate(particles(n))
     allocate(accelerations(n))
 
-    ! First read particle data
+    ! First read of particle data
     do i = 1, n
         read(u, *) particles(i)%m, &
                   particles(i)%p%x, particles(i)%p%y, particles(i)%p%z, &
@@ -43,9 +44,9 @@ program leapfrog
     
     close(u)
 
-    accelerations = vector3d(0.0, 0.0, 0.0)
+    accelerations = vector3d(0.0_real64, 0.0_real64, 0.0_real64)
 
-
+    !Start of Leapfrog integration method
     do i= 1, n
         do j= i+1, n
         rji= particles(j)%p - particles(i)%p
@@ -59,7 +60,6 @@ program leapfrog
     !Output file
     open(newunit=uout, file='output.dat', status='replace', action='write', iostat=stat)
     
-    
     n_steps = int(t_end / dt)
     t_out = 0.0_8
     t = 0.0_8
@@ -67,7 +67,7 @@ program leapfrog
     do k = 0, n_steps
         t = k * dt
         do i = 1, n
-            particles(i)%v = particles(i)%v + accelerations(i) * (dt/2.0_8)
+            particles(i)%v = particles(i)%v + accelerations(i) * (dt/2.0_real64)
         end do
         
         do i = 1, n
@@ -75,7 +75,7 @@ program leapfrog
         end do
         
         do i = 1, n
-            accelerations(i) = vector3d(0.0_8, 0.0_8, 0.0_8)
+            accelerations = vector3d(0.0_real64, 0.0_real64, 0.0_real64)
         end do
 
      do i = 1,n
@@ -90,7 +90,7 @@ program leapfrog
 
      
      do i = 1, n
-            particles(i)%v = particles(i)%v + accelerations(i) * (dt/2.0)
+            particles(i)%v = particles(i)%v + accelerations(i) * (dt/2.0_real64)
         end do
      
      t_out = t_out + dt
@@ -100,7 +100,7 @@ program leapfrog
                 write(uout, '(3F15.8)', advance='no') particles(i)%p%x, particles(i)%p%y, particles(i)%p%z
             end do
             write(uout, *) 
-            t_out = 0.0
+            t_out = 0.0_real64
         end if
         end do
 
