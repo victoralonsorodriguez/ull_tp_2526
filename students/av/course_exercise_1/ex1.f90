@@ -267,10 +267,8 @@ program ex1
          do idx1 = 1, num_p
             do idx2 = idx1 + 1, num_p
 
-               ! Calculate vector from particle idx1 to idx2
-               pos_diff = vector3d(p_array(idx2)%p%x - p_array(idx1)%p%x, &
-                                 p_array(idx2)%p%y - p_array(idx1)%p%y, &
-                                 p_array(idx2)%p%z - p_array(idx1)%p%z)
+               ! Calculate vector from particle idx1 to idx2 using subpp function
+               pos_diff = p_array(idx2)%p - p_array(idx1)%p
                
                ! Computing distance between particle idx1 to idx2
                d = distance(p_array(idx1)%p, p_array(idx2)%p)
