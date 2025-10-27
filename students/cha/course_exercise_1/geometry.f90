@@ -122,14 +122,21 @@ contains
     d2 = (p1%x - p2%x)**2 + (p1%y - p2%y)**2 + (p1%z - p2%z)**2
   end function distance2
 
+  ! === Norm (magnitude) of a vector ===
+  function norm(a) result(n)
+    type(vector3d), intent(in) :: a
+    real(real64) :: n
+    n = sqrt(a%x**2 + a%y**2 + a%z**2)
+  end function norm
+
   ! === Angle between two vectors ===
   function angle(a, b) result(theta)
     type(vector3d), intent(in) :: a, b
     real(real64) :: theta
     real(real64) :: dotprod, na, nb
     dotprod = a%x * b%x + a%y * b%y + a%z * b%z
-    na = sqrt(a%x**2 + a%y**2 + a%z**2)
-    nb = sqrt(b%x**2 + b%y**2 + b%z**2)
+    na = norm(a)
+    nb = norm(b)
     theta = acos(dotprod / (na * nb))
   end function angle
 
@@ -138,7 +145,7 @@ contains
     type(vector3d), intent(in) :: a
     type(vector3d) :: res
     real(real64) :: n
-    n = sqrt(a%x**2 + a%y**2 + a%z**2)
+    n = norm(a)
     if (n > 0.0) then
       res = a / n
     else
@@ -154,10 +161,3 @@ contains
   end function cross
 
 end module geometry
-
-
-
-
-
-
-
