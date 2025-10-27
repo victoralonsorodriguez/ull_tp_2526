@@ -3,12 +3,12 @@ program leapfrog
     use particle
     implicit none
 
-    integer :: i, n
+    integer :: n
     real(dp) :: dt, t_end, t, dt_out, t_out
     character(len=100) :: infile
     type(particle3d), allocatable :: p(:)
     type(vector3d), allocatable :: a(:)
-    integer :: input_unit, output_unit, ios
+    integer :: output_unit
 
     ! Read input file with initial conditions
     call get_command_argument(1, infile)
