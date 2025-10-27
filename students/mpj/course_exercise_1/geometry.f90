@@ -49,21 +49,17 @@ contains
         type(point3d),  intent(in) :: point
 
         type(vector3d) :: res
-        res%x = vector%x + point%x
-        res%y = vector%y + point%y
-        res%z = vector%z + point%z
+        res = vector3d(vector%x + point%x, vector%y + point%y, vector%z + point%z)
     end function sumvp
 
-    ! point + vector
+    ! point + vector = point
     function sumpv(point, vector) result(res)
         implicit none
         type(point3d),  intent(in) :: point
         type(vector3d), intent(in) :: vector
 
         type(point3d) :: res
-        res%x = point%x + vector%x
-        res%y = point%y + vector%y
-        res%z = point%z + vector%z
+        res = point3d(point%x + vector%x, point%y + vector%y, point%z + vector%z)
     end function sumpv
 
     ! vector + vector = vector
@@ -73,21 +69,17 @@ contains
         type(vector3d), intent(in) :: vector2
 
         type(vector3d) :: res
-        res%x = vector1%x + vector2%x
-        res%y = vector1%y + vector2%y
-        res%z = vector1%z + vector2%z
+        res = vector3d(vector1%x + vector2%x, vector1%y + vector2%y, vector1%z + vector2%z)
     end function sumvv
 
-    ! vector - point
+    ! vector - point = vector
     function subvp(vector, point) result(res)
         implicit none
         type(vector3d), intent(in) :: vector
         type(point3d),  intent(in) :: point
 
         type(vector3d) :: res
-        res%x = vector%x - point%x
-        res%y = vector%y - point%y
-        res%z = vector%z - point%z
+        res = vector3d(vector%x - point%x, vector%y - point%y, vector%z - point%z)
     end function subvp
 
     ! point - vector = point
@@ -97,9 +89,7 @@ contains
         type(vector3d), intent(in) :: vector
 
         type(point3d) :: res
-        res%x = point%x - vector%x
-        res%y = point%y - vector%y
-        res%z = point%z - vector%z
+        res = point3d(point%x - vector%x, point%y - vector%y, point%z - vector%z)
     end function subpv
 
     ! vector - vector = vector
@@ -109,9 +99,7 @@ contains
         type(vector3d), intent(in) :: vector2
 
         type(vector3d) :: res
-        res%x = vector1%x - vector2%x
-        res%y = vector1%y - vector2%y
-        res%z = vector1%z - vector2%z
+        res = vector3d(vector1%x - vector2%x, vector1%y - vector2%y, vector1%z - vector2%z)
     end function subvv
 
     ! point - point = vector
@@ -121,9 +109,7 @@ contains
         type(point3d), intent(in) :: point2
 
         type(vector3d) :: res
-        res%x = point1%x - point2%x
-        res%y = point1%y - point2%y
-        res%z = point1%z - point2%z
+        res = vector3d(point1%x - point2%x, point1%y - point2%y, point1%z - point2%z)
     end function subpp
 
     ! real * vector = vector
@@ -133,9 +119,7 @@ contains
         type(vector3d),  intent(in) :: vector
 
         type(vector3d) :: res
-        res%x = num * vector%x
-        res%y = num * vector%y
-        res%z = num * vector%z
+        res = vector3d(num * vector%x, num * vector%y, num * vector%z)
     end function mulrv
 
     ! vector * real = vector
@@ -145,9 +129,7 @@ contains
         type(vector3d),  intent(in) :: vector
 
         type(vector3d) :: res
-        res%x = vector%x * num
-        res%y = vector%y * num
-        res%z = vector%z * num
+        res = vector3d(vector%x * num, vector%y * num, vector%z * num)
     end function mulvr
 
     ! vector / real = vector
@@ -157,9 +139,7 @@ contains
         type(vector3d),  intent(in) :: vector
 
         type(vector3d) :: res
-        res%x = vector%x / num
-        res%y = vector%y / num
-        res%z = vector%z / num
+        res = vector3d(vector%x / num, vector%y / num, vector%z / num)
     end function divvr
 
     ! scalar product for two vectors
