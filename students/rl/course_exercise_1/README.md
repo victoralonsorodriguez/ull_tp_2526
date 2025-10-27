@@ -63,9 +63,7 @@ time p1x p1y p1z p2x p2y p2z ... pnx pny pnz
 ```
 ### **`plot.py`**
 
-Python script to visualize the simulation's output in 2D. It reads the 'output.dat' file and produces an animated GIF of the system's evolution. You can install the necessary dependencies using:
-
-pip install numpy matplotlib Pillow
+Python script to visualize the simulation's output in 2D. It reads the 'output.dat' file and produces an animated GIF of the system's evolution.
 
 ## Tutorial
 
