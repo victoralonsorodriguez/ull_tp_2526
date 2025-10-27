@@ -36,7 +36,7 @@ module geometry
 
         ! Substracting operator
         interface operator(-)
-            module procedure subvp, subpv, subvv
+            module procedure subvp, subpv, subvv, subpp
         end interface
 
         ! Product operator
@@ -122,6 +122,16 @@ module geometry
             res = vector3d(v1%x - v2%x, v1%y - v2%y, v1%z - v2%z)
             
         end function subvv
+
+        ! Function to subtract two points
+        function subpp(p1, p2) result(res)
+
+            type(point3d), intent(in) :: p1, p2
+            type(vector3d) :: res
+
+            res = vector3d(p1%x - p2%x, p1%y - p2%y, p1%z - p2%z)
+            
+        end function subpp
 
         ! Function mulrv for multiplying reals and vectors
         function mulrv(r,v) result(res)
