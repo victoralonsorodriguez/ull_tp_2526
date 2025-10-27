@@ -11,28 +11,21 @@ program leapfrog
   ! Softing parameter to avoid division by zero
   real(dp), parameter :: eps = 1.0e-5_dp
 
-  ! Dynamic arrays to store particles and their accelerations; size will be allocated at runtime
+  ! Dynamic arrays to store particles and their accelerations
   type(particle3d), allocatable :: particles(:)
   type(vector3d), allocatable :: a(:)
 
-  ! Input parameters
-  integer :: arg_count
-  character(len=200) :: input_file
-  integer :: ios, unit
-
   ! Output parameters
   character(len=200) :: output_file
-  integer :: out_unit
+  integer :: out_unit, ios
 
-  ! Opening the input file
-  unit = 10
-  input_file = "input.dat"
-  open(unit, file=trim(input_file), status='old', action='read', iostat=ios)
+  call get_input(dt, dt_out, t_end, n, particles)
+
+  allocate(a(n))
   
-  if (ios /= 0) then
-   print *, "Error: can't open file ", trim(input_file)
-   stop
-  end if
+
+
+  
 
   ! Opening the output file
   out_unit = 20
@@ -44,35 +37,10 @@ program leapfrog
    stop
   end if
 
-  ! Reading the input from the input file
-  read (unit, *) dt        ! integration step
-  read (unit, *) dt_out    ! time between two positions prints
-  read (unit, *) t_end     ! total time of the simulation
-  read (unit, *) n         ! number of particles
+  
 
-  ! Giving size to the arrays
-  allocate(particles(n))
-  allocate(a(n))
+  call compute_accelerations(particles, a, n, eps)
 
-  ! Reading masses, positions and velocities
-  do i = 1, n
-     read (unit, *) particles(i)%m, particles(i)%p%x, particles(i)%p%y, particles(i)%p%z, &
-             particles(i)%v%x, particles(i)%v%y, particles(i)%v%z
-     a(i) = vector3d(0.0_dp,0.0_dp,0.0_dp)
-  end do
-
-  close(unit)
-
-  ! Calculate the initial acceleration
-  do i = 1, n
-     do j = i+1, n
-        rji = particles(j)%p - particles(i)%p
-        r2 = rji%x**2 + rji%y**2 + rji%z**2 + eps**2
-        r3 = r2 * sqrt(r2)
-        a(i) = a(i) + particles(j)%m * rji / r3    ! Newton force
-        a(j) = a(j) - particles(i)%m * rji / r3
-     end do
-  end do
 
   ! Leapfrog integration
   t_out = 0.0_dp
@@ -114,5 +82,69 @@ program leapfrog
   ! Clean up
   deallocate(particles)
   deallocate(a)
+
+
+contains
+
+  subroutine get_input(dt, dt_out, t_end, n, particles)
+   implicit none
+   
+   real(dp), intent(out) :: dt, dt_out, t_end
+   integer, intent(out)  :: n
+   type(particle3d), allocatable, intent(out) :: particles(:)
+
+   ! Input parameters
+   character(len=200) :: input_file
+   integer :: i, ios, unit
+   
+   ! Opening the input file
+   unit = 10
+   input_file = "input.dat"
+   open(unit, file=trim(input_file), status='old', action='read', iostat=ios)
+   
+   if (ios /= 0) then
+      print *, "Error: can't open file ", trim(input_file)
+      stop
+   end if
+
+   ! Reading the input from the input file
+   read (unit, *) dt        ! integration step
+   read (unit, *) dt_out    ! time between two positions prints
+   read (unit, *) t_end     ! total time of the simulation
+   read (unit, *) n         ! number of particles
+
+   allocate(particles(n))
+
+   ! Reading masses, positions and velocities
+   do i = 1, n
+      read (unit, *) particles(i)%m, particles(i)%p%x, particles(i)%p%y, particles(i)%p%z, &
+                     particles(i)%v%x, particles(i)%v%y, particles(i)%v%z
+   end do
+
+   close(unit)
+
+  end subroutine get_input
+
+  subroutine compute_accelerations(particles, a, n, eps)
+   integer, intent(in) :: n
+   real(dp), intent(in) :: eps
+   type(particle3d), intent(in) :: particles(n)
+   type(vector3d), intent(inout) :: a(n)
+   integer :: i, j
+   real(dp) :: r2, r3
+   type(vector3d) :: rji
+
+
+   do i = 1, n
+      do j = i+1, n
+         rji = particles(j)%p - particles(i)%p
+         r2 = rji%x**2 + rji%y**2 + rji%z**2 + eps**2
+         r3 = r2 * sqrt(r2)
+         a(i) = a(i) + particles(j)%m * rji / r3    ! Newton force
+         a(j) = a(j) - particles(i)%m * rji / r3
+      end do
+   end do
+
+  end subroutine compute_accelerations
   
 end program leapfrog
