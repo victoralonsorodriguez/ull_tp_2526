@@ -119,8 +119,8 @@ program ex1v2
       ! We configure the default softening values. 
       ! For the simulation with the input.dat provided, 
       ! this is unnecessary, so we leave it set to false
-      soften = .false.
-      eps2_val = 0.0_dp
+      soften = .true.
+      eps2_val = 1.0e-2_dp
 
       if (present(use_softening)) soften = use_softening
       if (present(epsilon2)) eps2_val = epsilon2
