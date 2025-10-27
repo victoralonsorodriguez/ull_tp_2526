@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+from matplotlib.animation import FuncAnimation, PillowWriter
 from mpl_toolkits.mplot3d import Axes3D  
 
 data = np.loadtxt("output.dat")
@@ -69,12 +69,12 @@ def update(frame):
 ani = FuncAnimation(fig, update, frames=len(t), interval=50, blit=False)
 
 # Sometimes we just want to see results on screen, not saving it...
-save_choice = input("Do you want to save the animation as a video? [y/n]: ").strip().lower()
-
+save_choice = input("Do you want to save the animation as 'animation.gif'? [y/n]: ").strip().lower()
 if save_choice == "y":
-    print("Saving animation to animation.mp4... (this may take a while)")
-    ani.save("animation.mp4", writer="ffmpeg", dpi=200)
-    print("Video successfully saved in the current folder.")
+    print("Saving animation to 'animation.gif'... (this may take a while)")
+    writer = PillowWriter(fps=25)
+    ani.save("animation.gif", writer=writer)
+    print("Animation successfully saved.")
 
 plt.tight_layout()
 plt.show()
