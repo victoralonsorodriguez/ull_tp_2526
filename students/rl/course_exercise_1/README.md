@@ -51,7 +51,7 @@ It is used to store and manipulate particles during integration.
 
 ### **`ex1.f90`**
 
-The main program of the simulation performs time integration through the Leapfrom method. It is set up as follows:
+The main program of the simulation performs time integration through the Leapfrog method. It is set up as follows:
 
 1. Reads the initial conditions of the system from a text file that must be passed as a command when executing the program.
 2. Computes the gravitational accelerations between every pair of particles.
