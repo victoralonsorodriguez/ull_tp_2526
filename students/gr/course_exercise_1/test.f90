@@ -42,26 +42,26 @@ program test
     !=============================
     ! Print results
     !=============================
-    print *, '--- SUMAS ---'
+    print *, '--- ADDITIONS ---'
     print *, 'a + d = ', sum1
     print *, 'e + b = ', sum2
     print *, 'a + b = ', sumvv_res
 
-    print *, '--- RESTAS ---'
+    print *, '--- SUBTRACTIONS ---'
     print *, 'a - d = ', sub1
     print *, 'e - b = ', sub2
     print *, 'a - b = ', subvv_res
     print *, 'e - d = ', subpp_res
 
-    print *, '--- MULTIPLICACIONES ---'
+    print *, '--- MULTIPLICATIONS ---'
     print *, 'a * s = ', mul1
     print *, 's * a = ', mul2
-    print *, 'a * b (component-wise) = ', mulvv_res
+    print *, 'a * b = ', mulvv_res
 
     print *, '--- DIVISION ---'
     print *, 'a / s = ', div1
 
-    print *, '--- FUNCIONES GEOMÉTRICAS ---'
+    print *, '--- GEOMETRIC FUNCTIONS ---'
     print *, 'distance(d, e) = ', dist
     print *, 'angle(a, b) [radians] = ', ang
     print *, 'normalize(a) = ', normal
