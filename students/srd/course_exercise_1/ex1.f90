@@ -8,7 +8,7 @@ program leapfrog
 
   real(kind=bit64) :: dt, t_end, t, dt_out, t_out ! With our defined precision of 64 bits (in geometry module)
   real(kind=bit64) :: r2, r3
-  real(kind=bit64), parameter :: epsilon = 1.0e-5 ! Parameter to avoid divisions by zero
+  real(kind=bit64), parameter :: epsilon = 1.0e-5_bit64 ! Parameter to avoid divisions by zero
   
   type(particle3d), allocatable :: p(:) ! We re-define those using the definitions from the modules
   type(vector3d), allocatable :: a(:)
