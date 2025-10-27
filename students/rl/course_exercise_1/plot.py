@@ -48,7 +48,7 @@ def update(frame):
     # update particle positions
     x = pos[frame, :, 0]
     y = pos[frame, :, 1]
-    points.set_data(x, y) # fill in what we set u earlier
+    points.set_data(x, y) # fill in what we set up earlier
 
     # update trajectories
     for i in range(n):
