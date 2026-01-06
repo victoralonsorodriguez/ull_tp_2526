@@ -145,7 +145,7 @@ ani = FuncAnimation(fig, animate, frames=num_timesteps,
 print("Saving animation...")
 ani.save(f'{output_filename}.mp4', writer='ffmpeg', dpi=150)
 
-print("Showing animation...")
-plt.show()
+#print("Showing animation...")
+#plt.show()
 
 print("Animation finished")

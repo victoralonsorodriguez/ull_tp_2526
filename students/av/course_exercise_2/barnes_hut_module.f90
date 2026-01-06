@@ -187,17 +187,20 @@ module barnes_hut_module
 
         ! subroutine: calculate_forces
         ! computes acceleration for all particles
+        ! OMP parallelization
         subroutine calculate_forces(root, particles, accelerations)
-            type(cell_t), pointer :: root
-            type(particle3d), dimension(:), intent(in) :: particles
-            type(vector3d), dimension(:), intent(out) :: accelerations
-            
-            integer :: i
+        type(cell_t), pointer :: root
+        type(particle3d), dimension(:), intent(in) :: particles
+        type(vector3d), dimension(:), intent(out) :: accelerations
+        
+        integer :: i
 
-            do i = 1, size(particles)
-                accelerations(i) = vector3d(0.0_dp, 0.0_dp, 0.0_dp)
-                call calculate_force_recursive(root, particles(i), accelerations(i))
-            end do
+        !$omp parallel do private(i) shared(root, particles, accelerations)
+        do i = 1, size(particles)
+            accelerations(i) = vector3d(0.0_dp, 0.0_dp, 0.0_dp)
+            call calculate_force_recursive(root, particles(i), accelerations(i))
+        end do
+        !$omp end parallel do
 
         end subroutine calculate_forces
 

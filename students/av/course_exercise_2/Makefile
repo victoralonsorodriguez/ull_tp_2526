@@ -8,7 +8,7 @@ FC = gfortran
 FFLAGS = -O3 -Wall -fcheck=all -mmacosx-version-min=11.1
 
 # Flags for openmp
-OMPFLAGS = 
+OMPFLAGS = -fopenmp
 
 #--- Source and Object Files ---#
 # Define the list of object files (.o) explicitly

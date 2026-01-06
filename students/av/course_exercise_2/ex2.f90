@@ -3,9 +3,10 @@ program ex2
     use geometry
     use particle
     use barnes_hut_module
+    !$ use omp_lib
     implicit none
 
-    ! variables for simulation
+    ! variables for simulation setup
     integer :: n_particles, i, step
     real(kind=dp) :: dt, t_end, t, dt_out
     
@@ -26,6 +27,14 @@ program ex2
     ! temporary read variables
     real(kind=dp) :: m, rx, ry, rz, vx, vy, vz
 
+    ! variable to store thread properties
+    integer :: num_threads
+    integer :: req_threads
+    logical :: threads_set = .false.
+
+    ! simulation time variables
+    integer(kind=8) :: t_start, t_final, t_rate
+    real(kind=dp) :: total_time
 
     ! parse command line arguments (-i for input, -o for output)
     filename_in = 'input.dat'
@@ -42,10 +51,29 @@ program ex2
         else if (trim(arg_string) == '-o') then
             arg_idx = arg_idx + 1
             call get_command_argument(arg_idx, filename_out)
+        else if (trim(arg_string) == '-t') then
+            arg_idx = arg_idx + 1
+            call get_command_argument(arg_idx, arg_string)
+            read(arg_string, *) req_threads
+            threads_set = .true.
         end if
-        
         arg_idx = arg_idx + 1
     end do
+
+    ! determining the threads used
+    if (threads_set) then
+        !$ call omp_set_num_threads(req_threads)
+    end if
+
+    num_threads = 1
+    !$ num_threads = omp_get_max_threads()
+
+    if (num_threads > 1) then
+        print *, "OpenMP is ENABLED. Running with ", num_threads, " threads."
+    else
+        print *, "OpenMP is DISABLED. Running in serial mode."
+    end if
+
 
     ! check if the default or specified file exists
     inquire(file=trim(filename_in), exist=input_file_set)
@@ -78,6 +106,11 @@ program ex2
     end do
     close(u_in)
 
+    print *, "Starting simulation..."
+    
+    ! Start timer
+    call system_clock(count_rate=t_rate)
+    call system_clock(count=t_start)
 
     ! simulation loop
     open(unit=u_out, file=filename_out, status='replace', action='write')
@@ -127,7 +160,14 @@ program ex2
         if (mod(step, 100) == 0) print *, "step:", step, " time:", t
         
     end do
-    
+
+    ! Stop timer
+    call system_clock(count=t_final)
+
+    total_time = real(t_final - t_start, kind=dp) / real(t_rate, kind=dp)
+    print '(a, f15.6, a)', " Computation Time: ", total_time, " seconds"
+
+
     call delete_tree(root)
     close(u_out)
     print *, "simulation finished. output written to ", filename_out
