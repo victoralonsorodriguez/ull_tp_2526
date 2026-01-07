@@ -5,7 +5,9 @@ module barnes_hut_module
     implicit none
 
         private
-        public :: cell_t, barnes_hut_node, build_tree, calculate_forces, delete_tree
+        public :: cell_t, barnes_hut_node
+        public :: build_tree, delete_tree
+        public :: calculate_forces, calculate_force_recursive
 
         ! barnes-hut accuracy parameter
         real(kind=dp), parameter :: theta = 0.5_dp

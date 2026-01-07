@@ -1,5 +1,4 @@
-! main program for exercise 2 (MPI Version)
-! fulfills step 7: distributed version using MPI
+! main program for exercise 2 - MPI Version
 program ex2_mpi
     use geometry
     use particle
@@ -10,7 +9,6 @@ program ex2_mpi
 
     ! MPI Variables
     integer :: rank, nprocs, ierr
-    integer, dimension(MPI_STATUS_SIZE) :: status 
 
     ! variables for simulation setup
     integer :: n_particles, i, step
@@ -31,12 +29,17 @@ program ex2_mpi
     integer, parameter :: u_in = 10, u_out = 20
     character(len=256) :: filename_in = 'input.dat'
     character(len=256) :: filename_out = 'output.dat'
+    character(len=256) :: arg_string
+    integer :: num_args, arg_idx
+    logical :: input_file_set = .false.
     real(kind=dp) :: m, rx, ry, rz, vx, vy, vz
     
     ! simulation time variables
     double precision :: t_start, t_final
     real(kind=dp) :: total_time
 
+    t_start = 0.0d0
+    t_final = 0.0d0
     
     ! Initialize MPI
     call MPI_INIT(ierr)
@@ -46,11 +49,32 @@ program ex2_mpi
     
     ! Rank 0 reads input and broadcasts parameters
     if (rank == 0) then
-        ! Check command line arguments (simplified for MPI)
-        call get_command_argument(1, filename_in)
-        if (len_trim(filename_in) == 0) filename_in = 'input.dat'
-        
+
+        filename_in = 'input.dat'
+        filename_out = 'output.dat'
+        num_args = command_argument_count()
+        arg_idx = 1
+
+        do while (arg_idx <= num_args)
+            call get_command_argument(arg_idx, arg_string)
+            if (trim(arg_string) == '-i') then
+                arg_idx = arg_idx + 1
+                call get_command_argument(arg_idx, filename_in)
+            else if (trim(arg_string) == '-o') then
+                arg_idx = arg_idx + 1
+                call get_command_argument(arg_idx, filename_out)
+            end if
+            arg_idx = arg_idx + 1
+        end do
+
         print *, "MPI Master (Rank 0) reading from ", trim(filename_in)
+        
+        inquire(file=trim(filename_in), exist=input_file_set)
+        if (.not. input_file_set) then
+            print *, "Error: input file not found: ", trim(filename_in)
+            call MPI_ABORT(MPI_COMM_WORLD, 1, ierr)
+        end if
+
         open(unit=u_in, file=trim(filename_in), status='old', action='read')
         read(u_in, *) dt
         read(u_in, *) dt_out
@@ -69,7 +93,7 @@ program ex2_mpi
         end do
         close(u_in)
         
-        open(unit=u_out, file=filename_out, status='replace', action='write')
+        open(unit=u_out, file=trim(filename_out), status='replace', action='write')
     end if
 
     ! broadcast simulation parameters to all processes
@@ -111,18 +135,17 @@ program ex2_mpi
     end if
     i_end = i_start + n_local - 1
 
-    ! Start timer
+    ! start timer
     call MPI_BARRIER(MPI_COMM_WORLD, ierr)
     if (rank == 0) t_start = MPI_WTIME()
 
     
-    ! 5. Simulation Loop
-    
+    ! simulation Loop
     t = 0.0_dp
     t_out = 0.0_dp
     step = 0
 
-    ! Initial output (Rank 0 only)
+    ! initial output (rank 0 only)
     if (rank == 0) then
         call write_output(u_out, t, particles, n_particles)
         t_out = t_out + dt_out
@@ -130,53 +153,49 @@ program ex2_mpi
 
     do while (t < t_end)
         
-        ! A. Build Tree (Every process builds the FULL tree)
-        ! This is necessary because calculating force on *any* particle requires the whole tree
+        !--- build tree for every process ---!
         call build_tree(root, particles)
 
-        ! B. Calculate Forces (Distributed)
-        acc_local = vector3d(0.0_dp, 0.0_dp, 0.0_dp) ! Reset local forces
+        !--- calculate the distributed forces ---!
+        acc_local = vector3d(0.0_dp, 0.0_dp, 0.0_dp) 
         
-        ! Each rank only calculates forces for its subset [i_start, i_end]
+        !--- each rank only calculates forces for its subset ---!
         do i = i_start, i_end
             call calculate_force_recursive(root, particles(i), acc_local(i))
         end do
         
-        ! C. Reduce Forces
-        ! We need everyone to have the full force array to update positions (Velocity Verlet)
-        ! MPI_ALLREDUCE sums acc_local from all ranks into acc_global
-        ! We do this for X, Y, Z components separately
+        !--- reduce forces ---!
         call MPI_ALLREDUCE(acc_local%x, acc_global%x, n_particles, MPI_DOUBLE_PRECISION, MPI_SUM, MPI_COMM_WORLD, ierr)
         call MPI_ALLREDUCE(acc_local%y, acc_global%y, n_particles, MPI_DOUBLE_PRECISION, MPI_SUM, MPI_COMM_WORLD, ierr)
         call MPI_ALLREDUCE(acc_local%z, acc_global%z, n_particles, MPI_DOUBLE_PRECISION, MPI_SUM, MPI_COMM_WORLD, ierr)
 
-        ! D. Velocity Verlet (Step 1)
+        !--- velocity verlet ---!
         do i = 1, n_particles
             particles(i)%v = particles(i)%v + acc_global(i) * (0.5_dp * dt)
             particles(i)%p = particles(i)%p + particles(i)%v * dt
         end do
         
-        ! E. Re-Build Tree (positions changed)
+        !--- re-built tree ---!
         call delete_tree(root)
         call build_tree(root, particles)
         
-        ! F. Calculate Forces Again (Distributed)
+        !--- calculate forces again ---!
         acc_local = vector3d(0.0_dp, 0.0_dp, 0.0_dp)
         do i = i_start, i_end
             call calculate_force_recursive(root, particles(i), acc_local(i))
         end do
         
-        ! G. Reduce Forces Again
+        !--- reduce forces again ---!
         call MPI_ALLREDUCE(acc_local%x, acc_global%x, n_particles, MPI_DOUBLE_PRECISION, MPI_SUM, MPI_COMM_WORLD, ierr)
         call MPI_ALLREDUCE(acc_local%y, acc_global%y, n_particles, MPI_DOUBLE_PRECISION, MPI_SUM, MPI_COMM_WORLD, ierr)
         call MPI_ALLREDUCE(acc_local%z, acc_global%z, n_particles, MPI_DOUBLE_PRECISION, MPI_SUM, MPI_COMM_WORLD, ierr)
 
-        ! H. Velocity Verlet (Step 2)
+        !--- verlet velocity again ---!
         do i = 1, n_particles
             particles(i)%v = particles(i)%v + acc_global(i) * (0.5_dp * dt)
         end do
 
-        ! I. Output & Time Update
+        !--- output ---!
         t = t + dt
         step = step + 1
 
@@ -185,19 +204,18 @@ program ex2_mpi
                 call write_output(u_out, t, particles, n_particles)
                 t_out = t_out + dt_out
             end if
-            if (mod(step, 10) == 0) print *, "Step:", step, " Time:", t
+            if (mod(step, 100) == 0) print *, "Step:", step, " Time:", t
         end if
 
         call delete_tree(root)
     end do
 
     
-    ! 6. Finalize
-    
+    ! simulation total time
     if (rank == 0) then
         t_final = MPI_WTIME()
         total_time = t_final - t_start
-        print *, "MPI Simulation Finished. Time: ", total_time , " seconds."
+        print '(a, f15.6, a)', " Computation Time: ", total_time, " seconds"
         close(u_out)
     end if
 

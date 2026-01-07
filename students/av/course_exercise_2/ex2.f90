@@ -19,7 +19,8 @@ program ex2
 
     ! i/o variables
     integer, parameter :: u_in = 10, u_out = 20
-    character(len=256) :: filename_in, filename_out
+    character(len=256) :: filename_in = 'input.dat'
+    character(len=256) :: filename_out = 'output.dat'
     character(len=256) :: arg_string
     integer :: num_args, arg_idx
     logical :: input_file_set = .false.
@@ -37,8 +38,6 @@ program ex2
     real(kind=dp) :: total_time
 
     ! parse command line arguments (-i for input, -o for output)
-    filename_in = 'input.dat'
-    filename_out = 'output.dat'
     num_args = command_argument_count()
     arg_idx = 1
 
