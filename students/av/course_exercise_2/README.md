@@ -34,13 +34,13 @@ The physical integration is performed using the Velocity Verlet (Leapfrog) schem
 
 The following table summarizes the execution times (in seconds) for different particle counts across the three configurations.
 
-| N Particles   | Serial (1 thread) | OpenMP (10 threads) | MPI (10 procs) |
-|---------------|-------------------|---------------------|----------------|
-| Default (3)   | 0.037806s         | 0.274575s           | 0.107451s      |
-| 10            | 0.117000s         | 0.371804s           | 0.151225s      |
-| 100           | 1.570561s         | 1.438253s           | 1.409588s      |
-| 1000          | 48.883531s        | 18.13809s           | 39.94954s      |
-| 10000         | 3220.5481s        | 604.1928s           | 1399.597s      |
+| N Particles   | Serial (1 thread) | OpenMP (10 threads) | MPI (10 procs) | MPI (Single ALLREDUCE) |
+|---------------|-------------------|---------------------|----------------|------------------------|
+| Default (3)   | 0.037806s         | 0.274575s           | 0.107451s      | 0.007487s              |
+| 10            | 0.117000s         | 0.371804s           | 0.151225s      | 0.037927s              |
+| 100           | 1.570561s         | 1.438253s           | 1.409588s      | 1.799579s              |
+| 1000          | 48.883531s        | 18.13809s           | 39.94954s      | 93.08835s              |
+| 10000         | 3220.5481s        | 604.1928s           | 1399.597s      |                        |
 
 > **Note** Benchmarks were performed on a MacBook Pro M3 Pro with 12 cores. MPI and OpenMP times depend on the number of processes/threads used. MPI shows higher overhead in local machines due to redundant tree construction and communication latency.
 
